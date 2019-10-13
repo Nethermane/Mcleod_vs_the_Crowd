@@ -6,7 +6,8 @@ project(fightclub)
 set(CMAKE_CXX_STANDARD 14)
 set(EXECUTABLE_NAME fightclub)
 set(SFML_ROOT ${CMAKE_SOURCE_DIR}/SFML/SFML-2.5.1)
-add_executable(${EXECUTABLE_NAME} src/main.cpp)
+FILE(GLOB ALL_CPP_SRCS src/*.cpp)
+add_executable(${EXECUTABLE_NAME} ${ALL_CPP_SRCS})
 
 # Detect and add SFML
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
