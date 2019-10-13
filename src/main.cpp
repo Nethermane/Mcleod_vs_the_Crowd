@@ -1,20 +1,16 @@
 #include <iostream>
-#include <SFML/Window.hpp>
+
+
+#include "GameManager.h"
 
 int main() {
-    sf::Window window(sf::VideoMode(800, 600), "My window");
-
-    // run the program as long as the window is open
-    while (window.isOpen())
-    {
-        // check all the window's events that were triggered since the last iteration of the loop
-        sf::Event event{};
-        while (window.pollEvent(event))
-        {
-            // "close requested" event: we close the window
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-    }
+    sf::RenderWindow window;
+    window.create(sf::VideoMode::getDesktopMode(), "McLeod vs. The Crowd", sf::Style::None);
+    window.setFramerateLimit(60);
+    // Enable vertical sync. (vsync)
+    window.setVerticalSyncEnabled(true);
+    // When a key is pressed, sf::Event::KeyPressed will be true only once
+    window.setKeyRepeatEnabled(false);
+    GameManager game(window);
     return 0;
 }
