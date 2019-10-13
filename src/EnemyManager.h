@@ -7,7 +7,7 @@
 
 
 #include <vector>
-#include "Enemy.h"
+#include <SFML/Graphics/RenderTarget.hpp>
 #include "Map.h"
 
 class EnemyManager {
@@ -22,6 +22,8 @@ public:
     void update(long long int delta);
 
     explicit EnemyManager(const Map &map);
+
+    void draw(sf::RenderTarget &target, sf::RenderStates states);
 };
 
 
