@@ -12,6 +12,8 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
     clock.restart();
     while (window.isOpen()) {
         long long int delta = clock.getElapsedTime().asMicroseconds();
+        if (delta < 1)
+            continue;
         sf::Event event{};
         while (window.pollEvent(event)) {
             switch (event.type) {
