@@ -5,7 +5,6 @@
 #ifndef FIGHTCLUB_PROJECTILEMANAGER_H
 #define FIGHTCLUB_PROJECTILEMANAGER_H
 
-#include <vector>
 #include "Projectile.h"
 
 class ProjectileManager {

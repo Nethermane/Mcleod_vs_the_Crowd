@@ -7,15 +7,19 @@
 
 
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include "Common.h"
 
-class Enemy : sf::Sprite {
+class Enemy : sf::Drawable {
 private:
-    int health, speed, damage, reward;
-    sf::Vector2f *nextPosition;
-    long long int timeOnCurrentPath;
-    long long int timeTillNextPath;
+    int health{}, speed{}, damage{}, reward{};
+    const sf::Texture texture;
+    sf::Sprite sprite;
+    MapIterator currentPos;
+    const MapIterator trackEnd;
+    long long int timeOnCurrentPath{};
+    long long int timeTillNextPath{};
 public:
-
     int getHealth() const;
 
     int getSpeed() const;
@@ -25,9 +29,12 @@ public:
     int getReward() const;
 
     void hit(int damage);
+
 public:
-    void update(int delta);
-    Enemy();
+    void update(long long int delta);
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    Enemy(MapIterator trackStart, MapIterator trackEnd, const sf::Texture &texture);
+
 };
 
 

@@ -4,13 +4,13 @@
 #ifndef FIGHTCLUB_GAMEMANAGER_H
 #define FIGHTCLUB_GAMEMANAGER_H
 
-#include <SFML/Graphics.hpp>
 #include "EnemyManager.h"
 #include "Map.h"
 #include "TowerManager.h"
 #include "ProjectileManager.h"
 #include "UIManager.h"
 #include "GameStateManager.h"
+#include <SFML/Graphics/RenderWindow.hpp>
 
 class GameManager {
 private:
@@ -26,7 +26,7 @@ private:
 
 
 public:
-    GameManager(sf::RenderWindow &window);
+    explicit GameManager(sf::RenderWindow &window);
 };
 
 
