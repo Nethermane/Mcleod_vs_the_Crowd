@@ -20,6 +20,9 @@ Map::Map(const sf::Vector2u &screenSize) {
     turningPoints.emplace_front(0.5 * screenSize.x, 0.8 * screenSize.y);
     turningPoints.emplace_front(0.5 * screenSize.x, 0.1 * screenSize.y);
     turningPoints.emplace_front(0 * screenSize.x, 0.1 * screenSize.y);
+    for(const sf::Vector2f &point: turningPoints)
+        spline.addVertex(point);
+    spline.update();
 }
 
 MapIterator Map::begin() const {
@@ -28,4 +31,8 @@ MapIterator Map::begin() const {
 
 MapIterator Map::end() const {
     return turningPoints.end();
+}
+
+void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    target.draw(spline);
 }

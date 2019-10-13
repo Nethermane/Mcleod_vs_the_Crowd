@@ -21,7 +21,6 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
                 case sf::Event::Closed:
                     window.close();
                     break;
-
                     // key pressed
                 case sf::Event::KeyPressed:
                     switch (static_cast<char>(event.text.unicode)) {
@@ -39,7 +38,8 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
         towerManager.update(delta);
         enemyManager.update(delta);
         projectileManager.update(enemyManager.getEnemies(), delta);
-        window.clear(sf::Color::Red);
+        window.clear(sf::Color::Black);
+        map.draw(window, sf::RenderStates::Default);
         enemyManager.draw(window, sf::RenderStates::Default);
         window.display();
         clock.restart();
