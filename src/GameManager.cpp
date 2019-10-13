@@ -7,8 +7,9 @@
 #include "SFML/Window/Event.hpp"
 
 GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.getSize()), enemyManager(map),
-                                                     towerManager(map) {
+                                                     towerManager(map), gameStateManager(100, 10) {
 
+    gameStateManager.start();
     clock.restart();
     while (window.isOpen()) {
         long long int delta = clock.getElapsedTime().asMicroseconds();
@@ -27,6 +28,8 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
                         case sf::Keyboard::Q :
                             window.close();
                             break;
+                        case sf::Keyboard::P:
+                            gameStateManager.togglePause();
                         default:
                             break;
                     }
@@ -35,9 +38,11 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
                     break;
             }
         }
-        towerManager.update(delta);
-        enemyManager.update(delta);
-        projectileManager.update(enemyManager.getEnemies(), delta);
+        if (gameStateManager.isPaused()) {
+            towerManager.update(delta);
+            enemyManager.update(delta);
+            projectileManager.update(enemyManager.getEnemies(), delta);
+        }
         window.clear(sf::Color::Black);
         map.draw(window, sf::RenderStates::Default);
         enemyManager.draw(window, sf::RenderStates::Default);
