@@ -12,12 +12,38 @@ float angleBetweenTwoPoints(sf::Vector2f origin, sf::Vector2f target) {
 }
 
 void Enemy::update(long long int delta) {
-    sprite.move(static_cast<float>(std::cos(sprite.getRotation() * M_PI / 180.0) * speed * delta/1000),
-                static_cast<float>(std::sin(sprite.getRotation() * M_PI / 180.0) * speed * delta/1000));
-    std::cout << sprite.getPosition().x << ": " << sprite.getPosition().y << std::endl;
+    if (hitEnd)
+        return;
+    timeOnCurrentPath += delta;
+    if (timeOnCurrentPath > timeTillNextPath) {
+        sf::Vector2f first = (*currentTarget);
+        currentTarget = std::next(currentTarget, 1);
+        if (currentTarget == trackEnd) {
+            hitEnd = true;
+            return;
+        }
+        sf::Vector2f second = (*currentTarget);
+        sprite.setRotation(angleBetweenTwoPoints(first, second));
+        sprite.setPosition(first.x, first.y);
+        timeOnCurrentPath = timeOnCurrentPath - timeTillNextPath;
+        sprite.move(
+                static_cast<float>(std::cos(sprite.getRotation() * M_PI / 180.0) * speed * timeOnCurrentPath),
+                static_cast<float>(std::sin(sprite.getRotation() * M_PI / 180.0) * speed * timeOnCurrentPath));
+        //Set time till next turn
+        timeTillNextPath = static_cast<long long int>(std::sqrt(
+                std::pow(second.x - first.x, 2) +
+                std::pow(second.y - first.y, 2)) / speed - timeOnCurrentPath);
+        timeOnCurrentPath = 0;
+
+    } else {
+        sprite.move(static_cast<float>(std::cos(sprite.getRotation() * M_PI / 180.0) * speed * delta),
+                    static_cast<float>(std::sin(sprite.getRotation() * M_PI / 180.0) * speed * delta));
+    }
 }
 
 void Enemy::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    if (hitEnd)
+        return;
     target.draw(sprite);
 }
 
@@ -26,7 +52,7 @@ int Enemy::getHealth() const {
     return health;
 }
 
-int Enemy::getSpeed() const {
+float Enemy::getSpeed() const {
     return speed;
 }
 
@@ -45,13 +71,15 @@ void Enemy::hit(const int damage) {
 Enemy::Enemy(MapIterator trackStart,
              MapIterator trackEnd,
              const sf::Texture &texture)
-        : currentPos(trackStart), trackEnd(trackEnd), texture(texture), sprite(this->texture), speed(1) {
-    sf::Vector2f first = (*currentPos);
-    currentPos = std::next(currentPos, 1);
-    sf::Vector2f second = (*currentPos);
+        : currentTarget(trackStart), trackEnd(trackEnd), texture(texture), sprite(this->texture), speed(5) {
+    sf::Vector2f first = (*currentTarget);
+    currentTarget = std::next(currentTarget, 1);
+    sf::Vector2f second = (*currentTarget);
+    sprite.setOrigin(sprite.getGlobalBounds().width/2, sprite.getGlobalBounds().height/2);
     sprite.setRotation(angleBetweenTwoPoints(first, second));
-    sprite.setPosition(first.x, 300);
+    sprite.setPosition(first.x, first.y);
     timeOnCurrentPath = 0;
     timeTillNextPath = static_cast<long long int>(std::sqrt(
-            std::pow(second.x - first.x, 2) + std::pow(second.y - first.y, 2))) / speed;
+            std::pow(second.x - first.x, 2) +
+            std::pow(second.y - first.y, 2)) / speed);
 }

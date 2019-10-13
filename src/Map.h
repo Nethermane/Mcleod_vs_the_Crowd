@@ -19,7 +19,7 @@ public:
     MapIterator begin() const;
     MapIterator end() const;
 public:
-    Map();
+    Map(const sf::Vector2u &screenSize);
 
 };
 

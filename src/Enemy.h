@@ -12,17 +12,19 @@
 
 class Enemy : sf::Drawable {
 private:
-    int health{}, speed{}, damage{}, reward{};
+    int health{}, damage{}, reward{};
+    float speed;
     const sf::Texture texture;
     sf::Sprite sprite;
-    MapIterator currentPos;
+    MapIterator currentTarget;
     const MapIterator trackEnd;
     long long int timeOnCurrentPath{};
     long long int timeTillNextPath{};
+    bool hitEnd = false;
 public:
     int getHealth() const;
 
-    int getSpeed() const;
+    float getSpeed() const;
 
     int getDamage() const;
 

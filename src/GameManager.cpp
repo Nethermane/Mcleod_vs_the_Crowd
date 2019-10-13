@@ -2,14 +2,17 @@
 // Created by Bruce on 2019-10-12.
 //
 
+#include <iostream>
 #include "GameManager.h"
 #include "SFML/Window/Event.hpp"
-GameManager::GameManager(sf::RenderWindow &window) : window(window), enemyManager(map), towerManager(map) {
+
+GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.getSize()), enemyManager(map),
+                                                     towerManager(map) {
 
     clock.restart();
     while (window.isOpen()) {
         long long int delta = clock.getElapsedTime().asMicroseconds();
-        sf::Event event;
+        sf::Event event{};
         while (window.pollEvent(event)) {
             switch (event.type) {
                 // window closed
@@ -34,9 +37,9 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), enemyManage
         towerManager.update(delta);
         enemyManager.update(delta);
         projectileManager.update(enemyManager.getEnemies(), delta);
-        clock.restart();
-        window.clear(sf::Color::Green);
+        window.clear(sf::Color::Red);
         enemyManager.draw(window, sf::RenderStates::Default);
         window.display();
+        clock.restart();
     }
 }
