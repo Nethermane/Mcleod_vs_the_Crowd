@@ -1,0 +1,52 @@
+@startuml
+class GameManager {
+     -sf::RenderWindow &window;
+     -sf::Clock clock;
+     -Map map;
+     -EnemyManager enemyManager;
+     -TowerManager towerManager;
+     -ProjectileManager projectileManager;
+     -UIManager UIManager;
+     -GameStateManager gameStateManager;
+}
+class Map extends Drawable {
+    -std::forward_list<sf::Vector2f> turningPoints;
+    -sw::Spline spline;
+    +bool isTowerPositionValid(float x, float y) const;
+    +bool isTowerPositionValid(sf::Vector2f position) const;
+    +MapIterator begin() const;
+    +MapIterator end() const;
+}
+class EnemyManager {
+    -std::vector<Enemy> enemies;
+    -const Map &map;
+    +const std::vector<Enemy> &getEnemies() const;
+    +void update(long long int delta);
+    +explicit EnemyManager(const Map &map);
+    +void draw(sf::RenderTarget &target, sf::RenderStates states);
+}
+class Enemy extends Drawable{
+    -int health{}, damage{}, reward{};
+    -float speed;
+    -const sf::Texture texture;
+    -sf::Sprite sprite;
+    -MapIterator currentTarget;
+    -const MapIterator trackEnd;
+    -long long int timeOnCurrentPath{};
+    -long long int timeTillNextPath{};
+    -bool hitEnd = false;
+    +int getHealth() const;
+    +float getSpeed() const;
+    +int getDamage() const;
+    +int getReward() const;
+    +void hit(int damage);
+    +void update(long long int delta);
+    +void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+}
+
+GameManager *-- Map
+GameManager *-- EnemyManager
+EnemyManager "1" *-- "0..*" Enemy
+EnemyManager <- Map : Association
+
+@enduml
