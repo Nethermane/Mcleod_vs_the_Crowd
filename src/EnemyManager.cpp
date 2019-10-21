@@ -5,7 +5,7 @@
 #include "EnemyManager.h"
 
 
-void EnemyManager::update(long long int delta) {
+void EnemyManager::update(float delta) {
     for (auto &enemy: enemies) {
         enemy.update(delta);
     }

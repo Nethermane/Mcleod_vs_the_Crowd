@@ -5,16 +5,26 @@
 #include <iostream>
 #include "GameManager.h"
 #include "SFML/Window/Event.hpp"
+#include "SFML/Graphics/Font.hpp"
+#include "SFML/Graphics/Text.hpp"
 
 GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.getSize()), enemyManager(map),
                                                      towerManager(map), gameStateManager(100, 10) {
 
     gameStateManager.start();
+    sf::Font font;
+    if (!font.loadFromFile("../font/ApexMk2-Regular.otf"))
+    {
+        // error...
+    }
+    sf::Text text;
+    text.setFont(font);
+    text.setCharacterSize(24);
+    text.setFillColor(sf::Color::Red);
     clock.restart();
     while (window.isOpen()) {
-        long long int delta = clock.getElapsedTime().asMicroseconds();
-        if (delta < 1)
-            continue;
+        float delta = clock.getElapsedTime().asSeconds();
+        text.setString(std::to_string(static_cast<int>(1.0f/delta))); //fps
         sf::Event event{};
         while (window.pollEvent(event)) {
             switch (event.type) {
@@ -38,7 +48,8 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
                     break;
             }
         }
-        if (gameStateManager.isPaused()) {
+
+        if (!gameStateManager.isPaused()) {
             towerManager.update(delta);
             enemyManager.update(delta);
             projectileManager.update(enemyManager.getEnemies(), delta);
@@ -46,7 +57,8 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
         window.clear(sf::Color::Black);
         map.draw(window, sf::RenderStates::Default);
         enemyManager.draw(window, sf::RenderStates::Default);
-        window.display();
+        window.draw(text);
         clock.restart();
+        window.display();
     }
 }

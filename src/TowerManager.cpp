@@ -5,7 +5,7 @@
 #include "TowerManager.h"
 
 
-void TowerManager::update(long long int delta) {
+void TowerManager::update(float delta) {
 
 }
 

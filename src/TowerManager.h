@@ -15,7 +15,7 @@ private:
     const Map &map;
 public:
     explicit TowerManager(const Map &map);
-    void update(long long int delta);
+    void update(float delta);
 };
 
 
