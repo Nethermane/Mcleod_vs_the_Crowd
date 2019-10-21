@@ -19,7 +19,7 @@ public:
 private:
     const Map &map;
 public:
-    void update(long long int delta);
+    void update(float delta);
 
     explicit EnemyManager(const Map &map);
 

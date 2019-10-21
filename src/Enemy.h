@@ -13,14 +13,14 @@
 class Enemy : sf::Drawable {
 private:
     int health{}, damage{}, reward{};
-    float speed;
+    float speed, timeOnCurrentPath, timeTillNextPath;
     const sf::Texture texture;
+    float x_angle, y_angle;
     sf::Sprite sprite;
     MapIterator currentTarget;
     const MapIterator trackEnd;
-    long long int timeOnCurrentPath{};
-    long long int timeTillNextPath{};
     bool hitEnd = false;
+    void startNewMovePath();
 public:
     int getHealth() const;
 
@@ -33,7 +33,7 @@ public:
     void hit(int damage);
 
 public:
-    void update(long long int delta);
+    void update(float delta);
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     Enemy(MapIterator trackStart, MapIterator trackEnd, const sf::Texture &texture);
 

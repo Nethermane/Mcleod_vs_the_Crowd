@@ -16,7 +16,7 @@ public:
      * @param enemies all enemies
      * @param delta time since last frame
      */
-    void update(std::vector<Enemy> enemies, long long int delta);
+    void update(std::vector<Enemy> enemies, float delta);
 };
 
 

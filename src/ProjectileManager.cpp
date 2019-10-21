@@ -5,6 +5,6 @@
 #include "ProjectileManager.h"
 
 
-void ProjectileManager::update(std::vector<Enemy> enemies, long long int delta) {
+void ProjectileManager::update(std::vector<Enemy> enemies, float delta) {
 
 }
