@@ -1,4 +1,8 @@
 @startuml
+skinparam enum<<enum>> {
+  BackgroundColor LightGreen
+}
+
 class GameManager {
      -sf::RenderWindow &window;
      -sf::Clock clock;
@@ -8,12 +12,11 @@ class GameManager {
      -ProjectileManager projectileManager;
      -UIManager UIManager;
      -GameStateManager gameStateManager;
+     -SoundManager soundManager;
 }
-class Map extends Drawable {
+class Map {
     -std::forward_list<sf::Vector2f> turningPoints;
     -sw::Spline spline;
-    +bool isTowerPositionValid(float x, float y) const;
-    +bool isTowerPositionValid(sf::Vector2f position) const;
     +MapIterator begin() const;
     +MapIterator end() const;
 }
@@ -21,32 +24,122 @@ class EnemyManager {
     -std::vector<Enemy> enemies;
     -const Map &map;
     +const std::vector<Enemy> &getEnemies() const;
-    +void update(long long int delta);
+    +void update(const float delta);
     +explicit EnemyManager(const Map &map);
     +void draw(sf::RenderTarget &target, sf::RenderStates states);
 }
-class Enemy extends Drawable{
+class Enemy{
     -int health{}, damage{}, reward{};
     -float speed;
     -const sf::Texture texture;
     -sf::Sprite sprite;
     -MapIterator currentTarget;
     -const MapIterator trackEnd;
-    -long long int timeOnCurrentPath{};
-    -long long int timeTillNextPath{};
+    -float timeOnCurrentPath{};
+    -float timeTillNextPath{};
     -bool hitEnd = false;
     +int getHealth() const;
     +float getSpeed() const;
     +int getDamage() const;
     +int getReward() const;
     +void hit(int damage);
-    +void update(long long int delta);
+    +void update(const float delta);
     +void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 }
-
-GameManager *-- Map
+class TowerManager {
+     -std::vector<Tower> towers;
+     -const Map &map;
+     +const std::vector<Enemy> &getTowers() const;
+     +void update(const float delta);
+     +explicit TowerManager(const Map &map);
+     +void draw(sf::RenderTarget &target, sf::RenderStates states);
+     +bool isTowerPositionValid(float x, float y) const;
+     +bool isTowerPositionValid(sf::Vector2f position) const;
+ }
+class Tower{
+     -int range, rotation, cost, level, upgradeCost;
+     -float timeSinceLastAttack, attackCooldown;
+     -const sf::Texture texture;
+     -sf::Sprite sprite;
+     +explicit Tower(const Vector2f position);
+     +update(const float delta);
+     +draw(sf::RenderTarget &target, sf::RenderStates states);
+ }
+class ProjectileManager {
+    -std::vector<Projectile> projectiles;
+    +const std::vector<Projectile> &getProjectiles() const;
+    +void update(const float delta, Vector<Enemy> &enemies);
+    +void draw(sf::RenderTarget &target, sf::RenderStates states);
+}
+class SoundManager {
+    -Music music;
+    +void play();
+    +void pause();
+    +void stop();
+}
+class Projectile {
+    -int speed, damage;
+    -bool deletable;
+    -const FloatRect &bounds;
+    -const Vector2f &angle;
+    -const sf::Texture texture;
+    -sf::Sprite sprite;
+    +isDeletable();
+    +explicit Projectile(const Vector2f &angle, const FloatRect &bounds);
+    +void update(const float delta);
+    +void draw(sf::RenderTarget &target, sf::RenderStates states);
+}
+class UIManager {
+    +pause();
+    +resume();
+    +lose();
+    +win();
+    +setting();
+}
+class GameStateManager {
+    -int health, maxHealth, round, maxRound, money;
+    -bool paused;
+    +int getHealth() const;
+    +void setHealth(int health);
+    +int getMaxHealth() const;
+    +void setMaxHealth(int maxHealth);
+    +int getRound() const;
+    +void setRound(int round);
+    +int getMaxRound() const;
+    +void setMaxRound(int maxRound);
+    +int getMoney() const;
+    +void setMoney(int money);
+    +GameState getGameState() const;
+    +void setGameState(GameState gameState);
+    +void start();
+    +void togglePause();
+    +bool isPaused();
+    +GameStateManager(int maxHealth, int maxRound);
+    -GameState gameState;
+}
+enum GameState<<enum>> {
+          +PreGame = 0,
+          +Playing = 1,
+          +Round_Interim = 2,
+          +Lose = 3,
+}
 GameManager *-- EnemyManager
+GameManager *-- Map
+GameManager *-- TowerManager
+GameManager *-- ProjectileManager
+GameManager *-- UIManager
+GameManager *-- GameStateManager
+GameStateManager *-- GameState
+GameManager *-- SoundManager
+
+
 EnemyManager "1" *-- "0..*" Enemy
 EnemyManager <- Map : Association
+
+TowerManager "1" *-- "0..*" Tower
+TowerManager <- Map : Association
+
+ProjectileManager "1" *-- "0..*" Projectile
+
 
 @enduml
