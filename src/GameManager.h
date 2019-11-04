@@ -10,6 +10,7 @@
 #include "ProjectileManager.h"
 #include "UIManager.h"
 #include "GameStateManager.h"
+#include "SoundManager.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 
 class GameManager {
@@ -20,8 +21,9 @@ private:
     EnemyManager enemyManager;
     TowerManager towerManager;
     ProjectileManager projectileManager;
-    UIManager UIManager;
+    UIManager uiManager;
     GameStateManager gameStateManager;
+    SoundManager soundManager;
 
 
 
