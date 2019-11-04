@@ -10,11 +10,13 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include "Map.h"
 #include "GameStateManager.h"
+#include "ResourceManager.h"
 
 class EnemyManager {
 private:
     std::vector<Enemy> enemies;
     GameStateManager &gameStateManager;
+    ResourceManager &resourceManager;
 public:
     const std::vector<Enemy> &getEnemies() const;
 
@@ -23,9 +25,10 @@ private:
 public:
     void update(float delta);
 
-    explicit EnemyManager(const Map &map, GameStateManager &gameStateManager);
+    explicit EnemyManager(const Map &map, GameStateManager &gameStateManager, ResourceManager &resourceManager);
 
     void draw(sf::RenderTarget &target, sf::RenderStates states);
+    void makeEnemies();
 };
 
 

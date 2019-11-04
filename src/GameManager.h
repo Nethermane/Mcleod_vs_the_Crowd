@@ -10,6 +10,7 @@
 #include "ProjectileManager.h"
 #include "UIManager.h"
 #include "GameStateManager.h"
+#include "ResourceManager.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 
 class GameManager {
@@ -22,7 +23,8 @@ private:
     ProjectileManager projectileManager;
     UIManager UIManager;
     GameStateManager gameStateManager;
-
+    ResourceManager resourceManager;
+    void loadTextures();
 
 
 public:

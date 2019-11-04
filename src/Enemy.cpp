@@ -1,3 +1,5 @@
+#include <utility>
+
 //
 // Created by Bruce on 2019-10-12.
 //
@@ -50,9 +52,10 @@ void Enemy::hit(const int damage) {
 
 Enemy::Enemy(MapIterator trackStart,
              MapIterator trackEnd,
-             const sf::Texture &texture, int health, int damage, int reward)
-        : currentTarget(trackStart), trackEnd(trackEnd), texture(texture), sprite(this->texture), speed(1000),
-          timeOnCurrentPath(0), timeTillNextPath(0) {
+             std::shared_ptr<sf::Texture> texture, int health, int damage, int reward, float speed)
+        : currentTarget(trackStart), trackEnd(trackEnd),
+          timeOnCurrentPath(0), timeTillNextPath(0), health(health), damage(damage),reward(reward),speed(speed), texture(texture) {
+    sprite = sf::Sprite(*(this->texture));
     sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
     startNewMovePath(true);
 }
