@@ -42,6 +42,10 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
                             break;
                         case sf::Keyboard::P:
                             gameStateManager.togglePause();
+                            if(gameStateManager.isPaused())
+                                soundManager.pause();
+                            else
+                                soundManager.resume();
                         default:
                             break;
                     }
@@ -55,8 +59,6 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
             towerManager.update(delta);
             enemyManager.update(delta);
             projectileManager.update(enemyManager.getEnemies(), delta);
-        } else {
-            soundManager.start();
         }
         window.clear(sf::Color::Black);
         map.draw(window, sf::RenderStates::Default);
