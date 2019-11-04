@@ -18,17 +18,18 @@ private:
     GameStateManager &gameStateManager;
     ResourceManager &resourceManager;
     std::vector<std::shared_ptr<sf::Texture>> healthBarTextures;
+    std::vector<std::shared_ptr<sf::Texture>> enemyTextures;
+    const Map &map;
+    void addRandomEnemy();
 public:
     const std::vector<Enemy> &getEnemies() const;
 
-private:
-    const Map &map;
 public:
     void update(float delta);
 
     explicit EnemyManager(const Map &map, GameStateManager &gameStateManager, ResourceManager &resourceManager);
 
-    void loadHealthBarTextures();
+    void loadEnemyTextures();
     void draw(sf::RenderTarget &target, sf::RenderStates states);
     void makeEnemies();
 };

@@ -40,18 +40,31 @@ void EnemyManager::draw(sf::RenderTarget &target, sf::RenderStates states) {
 }
 
 void EnemyManager::makeEnemies() {
-    for (int i = 1; i < 5; i++) {
-        enemies.emplace_back(map.begin(), map.end(), resourceManager.GetTexture(ResourceIdentifier::enemy),
-                             healthBarTextures, 10+i, 10, 10, 20*i + 100);
-    }
+    addRandomEnemy();
 }
 
-void EnemyManager::loadHealthBarTextures() {
+void EnemyManager::loadEnemyTextures() {
+    enemyTextures.clear();
+    enemyTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::enemy_1));
+    enemyTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::enemy_2));
+    enemyTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::enemy_3));
+    enemyTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::enemy_4));
+    enemyTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::enemy_5));
     healthBarTextures.clear();
     healthBarTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::HealthF));
     healthBarTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::HealthC));
     healthBarTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::HealthB));
     healthBarTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::HealthA));
+}
+
+void EnemyManager::addRandomEnemy() {
+    int level = static_cast<int>(rand() % enemyTextures.size() + 1);
+    int health = level * 5;
+    int damage = level;
+    int reward = level;
+    int speed = 100;
+    enemies.emplace_back(map.begin(), map.end(), enemyTextures[level - 1], healthBarTextures,
+                         health, damage, reward, speed);
 }
 
 

@@ -12,7 +12,11 @@
 
 enum ResourceIdentifier
 {
-    enemy,
+    enemy_1,
+    enemy_2,
+    enemy_3,
+    enemy_4,
+    enemy_5,
     HealthA,
     HealthB,
     HealthC,

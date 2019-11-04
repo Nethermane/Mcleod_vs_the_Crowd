@@ -12,8 +12,7 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
                                                      gameStateManager(100, 10),
                                                      enemyManager(map, gameStateManager, resourceManager) {
     loadTextures();
-    enemyManager.loadHealthBarTextures();
-    enemyManager.makeEnemies();
+    enemyManager.loadEnemyTextures();
     gameStateManager.start();
     sf::Font font;
     if (!font.loadFromFile("../font/ApexMk2-Regular.otf")) {
@@ -47,6 +46,8 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
                                 soundManager.pause();
                             else
                                 soundManager.resume();
+                        case sf::Keyboard::E:
+                            enemyManager.makeEnemies();
                         default:
                             break;
                     }
@@ -71,7 +72,11 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
 }
 
 void GameManager::loadTextures() {
-    resourceManager.LoadTexture(ResourceIdentifier::enemy, "../img/logo.png");
+    resourceManager.LoadTexture(ResourceIdentifier::enemy_1, "../img/enemy_1.png");
+    resourceManager.LoadTexture(ResourceIdentifier::enemy_2, "../img/enemy_2.png");
+    resourceManager.LoadTexture(ResourceIdentifier::enemy_3, "../img/enemy_3.png");
+    resourceManager.LoadTexture(ResourceIdentifier::enemy_4, "../img/enemy_4.png");
+    resourceManager.LoadTexture(ResourceIdentifier::enemy_5, "../img/enemy_5.png");
     resourceManager.LoadTexture(ResourceIdentifier::HealthA, "../img/Health_A.png");
     resourceManager.LoadTexture(ResourceIdentifier::HealthB, "../img/Health_B.png");
     resourceManager.LoadTexture(ResourceIdentifier::HealthC, "../img/Health_C.png");
