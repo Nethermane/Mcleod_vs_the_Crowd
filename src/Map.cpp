@@ -16,9 +16,9 @@ bool Map::isTowerPositionValid(sf::Vector2f position) const {
 
 Map::Map(const sf::Vector2u &screenSize) {
 
-    turningPoints.emplace_front(1 * screenSize.x, 0.8 * screenSize.y);
-    turningPoints.emplace_front(0.5 * screenSize.x, 0.8 * screenSize.y);
-    turningPoints.emplace_front(0.5 * screenSize.x, 0.1 * screenSize.y);
+    turningPoints.emplace_front(1 * screenSize.x, 0.9 * screenSize.y);
+    turningPoints.emplace_front(0.6 * screenSize.x, 0.1 * screenSize.y);
+    turningPoints.emplace_front(0.3 * screenSize.x, 0.9 * screenSize.y);
     turningPoints.emplace_front(0 * screenSize.x, 0.1 * screenSize.y);
     for(const sf::Vector2f &point: turningPoints)
         spline.addVertex(point);

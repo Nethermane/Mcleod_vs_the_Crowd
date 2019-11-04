@@ -62,8 +62,9 @@ Enemy::Enemy(MapIterator trackStart,
         : currentTarget(trackStart), trackEnd(trackEnd),
           timeOnCurrentPath(0), timeTillNextPath(0), healthBar(health, healthBarTextures), damage(damage),reward(reward),speed(speed), texture(
                 std::move(texture)) {
+    sprite.setScale(0.3,0.3);
     sprite.setTexture(*this->texture);
-    sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
+    sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
     startNewMovePath(true);
 }
 
