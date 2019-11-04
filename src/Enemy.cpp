@@ -16,7 +16,7 @@ void Enemy::update(float delta) {
         return;
     timeOnCurrentPath += delta;
     if (timeOnCurrentPath > timeTillNextPath)
-        startNewMovePath();
+        startNewMovePath(false);
     else
         sprite.move(x_angle * speed * delta, y_angle * speed * delta);
 }
@@ -54,10 +54,10 @@ Enemy::Enemy(MapIterator trackStart,
         : currentTarget(trackStart), trackEnd(trackEnd), texture(texture), sprite(this->texture), speed(1000),
           timeOnCurrentPath(0), timeTillNextPath(0) {
     sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
-    startNewMovePath();
+    startNewMovePath(true);
 }
 
-void Enemy::startNewMovePath() {
+void Enemy::startNewMovePath(const bool starting) {
     sf::Vector2f first = (*currentTarget);
     currentTarget = std::next(currentTarget, 1);
     if (currentTarget == trackEnd) {
@@ -65,10 +65,19 @@ void Enemy::startNewMovePath() {
         return;
     }
     sf::Vector2f second = (*currentTarget);
+
     sprite.setRotation(angleBetweenTwoPoints(first, second));
-    sprite.setPosition(first.x, first.y);
     x_angle = static_cast<float>(std::cos(sprite.getRotation() * M_PI / 180.0));
     y_angle = static_cast<float>(std::sin(sprite.getRotation() * M_PI / 180.0));
+    if(std::next(currentTarget, 1) == trackEnd) {
+        second.x += x_angle * sprite.getGlobalBounds().width;
+        second.y += y_angle * sprite.getGlobalBounds().width;
+    }
+    if(starting) {
+        first.x -= x_angle * sprite.getGlobalBounds().width;
+        first.y -= y_angle * sprite.getGlobalBounds().width;
+    }
+    sprite.setPosition(first.x, first.y);
     timeOnCurrentPath -= timeTillNextPath;
     //Extra movement around corner that may have been lost to lag
     sprite.move(x_angle * speed * timeOnCurrentPath, y_angle * speed * timeOnCurrentPath);

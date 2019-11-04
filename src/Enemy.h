@@ -20,7 +20,7 @@ private:
     MapIterator currentTarget;
     MapIterator trackEnd;
     bool hitEnd = false;
-    void startNewMovePath();
+    void startNewMovePath(bool starting);
 public:
     int getHealth() const;
 
