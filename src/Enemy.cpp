@@ -16,7 +16,7 @@ void Enemy::update(float delta) {
         return;
     timeOnCurrentPath += delta;
     if (timeOnCurrentPath > timeTillNextPath)
-        startNewMovePath();
+        startNewMovePath(false);
     else
         sprite.move(x_angle * speed * delta, y_angle * speed * delta);
 }
@@ -50,14 +50,14 @@ void Enemy::hit(const int damage) {
 
 Enemy::Enemy(MapIterator trackStart,
              MapIterator trackEnd,
-             const sf::Texture &texture)
+             const sf::Texture &texture, int health, int damage, int reward)
         : currentTarget(trackStart), trackEnd(trackEnd), texture(texture), sprite(this->texture), speed(1000),
           timeOnCurrentPath(0), timeTillNextPath(0) {
     sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
-    startNewMovePath();
+    startNewMovePath(true);
 }
 
-void Enemy::startNewMovePath() {
+void Enemy::startNewMovePath(const bool starting) {
     sf::Vector2f first = (*currentTarget);
     currentTarget = std::next(currentTarget, 1);
     if (currentTarget == trackEnd) {
@@ -65,10 +65,19 @@ void Enemy::startNewMovePath() {
         return;
     }
     sf::Vector2f second = (*currentTarget);
+
     sprite.setRotation(angleBetweenTwoPoints(first, second));
-    sprite.setPosition(first.x, first.y);
     x_angle = static_cast<float>(std::cos(sprite.getRotation() * M_PI / 180.0));
     y_angle = static_cast<float>(std::sin(sprite.getRotation() * M_PI / 180.0));
+    if(std::next(currentTarget, 1) == trackEnd) {
+        second.x += x_angle * sprite.getGlobalBounds().width;
+        second.y += y_angle * sprite.getGlobalBounds().width;
+    }
+    if(starting) {
+        first.x -= x_angle * sprite.getGlobalBounds().width;
+        first.y -= y_angle * sprite.getGlobalBounds().width;
+    }
+    sprite.setPosition(first.x, first.y);
     timeOnCurrentPath -= timeTillNextPath;
     //Extra movement around corner that may have been lost to lag
     sprite.move(x_angle * speed * timeOnCurrentPath, y_angle * speed * timeOnCurrentPath);
@@ -76,4 +85,25 @@ void Enemy::startNewMovePath() {
     timeTillNextPath = static_cast<float>(std::sqrt(std::pow(second.x - first.x, 2) +
                                                     std::pow(second.y - first.y, 2)) / speed) - timeOnCurrentPath;
     timeOnCurrentPath = 0;
+}
+
+bool Enemy::hasHitEnd() {
+    return hitEnd;
+}
+
+Enemy &Enemy::operator=(const Enemy &other) {
+    health = other.health;
+    damage = other.damage;
+    reward = other.reward;
+    speed = other.speed;
+    timeOnCurrentPath = other.timeOnCurrentPath;
+    timeTillNextPath = other.timeTillNextPath;
+    texture = other.texture;
+    x_angle = other.x_angle;
+    y_angle = other.y_angle;
+    sprite = other.sprite;
+    currentTarget = other.currentTarget;
+    trackEnd = other.trackEnd;
+    hitEnd = other.hitEnd;
+    return *this;
 }
