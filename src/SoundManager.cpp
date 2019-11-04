@@ -1,3 +1,5 @@
+#include <utility>
+
 //
 // Created by jason on 10/31/19.
 //
@@ -25,6 +27,9 @@ void SoundManager::start() {
 void SoundManager::pause() {
     this->music.pause();
 }
+void SoundManager::resume() {
+    this->music.play();
+}
 
 void SoundManager::stop() {
     this->music.stop();
@@ -32,6 +37,6 @@ void SoundManager::stop() {
 
 int SoundManager::change(std::string filename) {
     this->stop();
-    this->play(filename);
+    this->play(std::move(filename));
     return 1;
 }

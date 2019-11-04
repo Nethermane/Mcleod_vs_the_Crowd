@@ -15,6 +15,7 @@ class SoundManager {
         int change(std::string filename);
         void start();
         void pause();
+        void resume();
         void stop();
     private:
         sf::Music music;
