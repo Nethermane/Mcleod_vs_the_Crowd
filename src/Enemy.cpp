@@ -50,7 +50,7 @@ void Enemy::hit(const int damage) {
 
 Enemy::Enemy(MapIterator trackStart,
              MapIterator trackEnd,
-             const sf::Texture &texture)
+             const sf::Texture &texture, int health, int damage, int reward)
         : currentTarget(trackStart), trackEnd(trackEnd), texture(texture), sprite(this->texture), speed(1000),
           timeOnCurrentPath(0), timeTillNextPath(0) {
     sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
@@ -76,4 +76,25 @@ void Enemy::startNewMovePath() {
     timeTillNextPath = static_cast<float>(std::sqrt(std::pow(second.x - first.x, 2) +
                                                     std::pow(second.y - first.y, 2)) / speed) - timeOnCurrentPath;
     timeOnCurrentPath = 0;
+}
+
+bool Enemy::hasHitEnd() {
+    return hitEnd;
+}
+
+Enemy &Enemy::operator=(const Enemy &other) {
+    health = other.health;
+    damage = other.damage;
+    reward = other.reward;
+    speed = other.speed;
+    timeOnCurrentPath = other.timeOnCurrentPath;
+    timeTillNextPath = other.timeTillNextPath;
+    texture = other.texture;
+    x_angle = other.x_angle;
+    y_angle = other.y_angle;
+    sprite = other.sprite;
+    currentTarget = other.currentTarget;
+    trackEnd = other.trackEnd;
+    hitEnd = other.hitEnd;
+    return *this;
 }

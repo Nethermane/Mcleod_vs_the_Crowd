@@ -12,13 +12,13 @@
 
 class Enemy : sf::Drawable {
 private:
-    int health{}, damage{}, reward{};
+    int health, damage, reward;
     float speed, timeOnCurrentPath, timeTillNextPath;
-    const sf::Texture texture;
+    sf::Texture texture;
     float x_angle, y_angle;
     sf::Sprite sprite;
     MapIterator currentTarget;
-    const MapIterator trackEnd;
+    MapIterator trackEnd;
     bool hitEnd = false;
     void startNewMovePath();
 public:
@@ -31,11 +31,13 @@ public:
     int getReward() const;
 
     void hit(int damage);
+    bool hasHitEnd();
+    Enemy& operator=(const Enemy& other);
 
 public:
     void update(float delta);
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-    Enemy(MapIterator trackStart, MapIterator trackEnd, const sf::Texture &texture);
+    Enemy(MapIterator trackStart, MapIterator trackEnd, const sf::Texture &texture, int health, int damage, int reward);
 
 };
 

@@ -8,13 +8,12 @@
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/Text.hpp"
 
-GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.getSize()), enemyManager(map),
-                                                     towerManager(map), gameStateManager(100, 10) {
+GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.getSize()), towerManager(map),
+                                                     gameStateManager(100, 10), enemyManager(map, gameStateManager) {
 
     gameStateManager.start();
     sf::Font font;
-    if (!font.loadFromFile("../font/ApexMk2-Regular.otf"))
-    {
+    if (!font.loadFromFile("../font/ApexMk2-Regular.otf")) {
         // error...
     }
     sf::Text text;
@@ -24,7 +23,7 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
     clock.restart();
     while (window.isOpen()) {
         float delta = clock.getElapsedTime().asSeconds();
-        text.setString(std::to_string(static_cast<int>(1.0f/delta))); //fps
+        text.setString(std::to_string(static_cast<int>(1.0f / delta))); //fps
         sf::Event event{};
         while (window.pollEvent(event)) {
             switch (event.type) {
