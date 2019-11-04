@@ -22,9 +22,12 @@ void EnemyManager::update(float delta) {
     }
 }
 
-EnemyManager::EnemyManager(const Map &map, GameStateManager &gameStateManager, ResourceManager &resourceManager) : map(map),
-                                                                                 gameStateManager(gameStateManager), resourceManager(resourceManager) {
-
+EnemyManager::EnemyManager(const Map &map, GameStateManager &gameStateManager, ResourceManager &resourceManager)
+        : map(map),
+          gameStateManager(
+                  gameStateManager),
+          resourceManager(
+                  resourceManager) {
 }
 
 const std::vector<Enemy> &EnemyManager::getEnemies() const {
@@ -37,8 +40,18 @@ void EnemyManager::draw(sf::RenderTarget &target, sf::RenderStates states) {
 }
 
 void EnemyManager::makeEnemies() {
-    for (int i = 0; i < 10; i++) {
-        enemies.emplace_back(map.begin(), map.end(), resourceManager.GetTexture(ResourceIdentifier::enemy), 10, 10, 10, i * 100);
+    for (int i = 1; i < 5; i++) {
+        enemies.emplace_back(map.begin(), map.end(), resourceManager.GetTexture(ResourceIdentifier::enemy),
+                             healthBarTextures, 10+i, 10, 10, 20*i + 100);
     }
 }
+
+void EnemyManager::loadHealthBarTextures() {
+    healthBarTextures.clear();
+    healthBarTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::HealthF));
+    healthBarTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::HealthC));
+    healthBarTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::HealthB));
+    healthBarTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::HealthA));
+}
+
 

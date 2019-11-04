@@ -1,5 +1,7 @@
 #include <utility>
 
+#include <utility>
+
 //
 // Created by Bruce on 2019-10-12.
 //
@@ -21,17 +23,19 @@ void Enemy::update(float delta) {
         startNewMovePath(false);
     else
         sprite.move(x_angle * speed * delta, y_angle * speed * delta);
+    healthBar.update(sprite);
 }
 
 void Enemy::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     if (hitEnd)
         return;
     target.draw(sprite);
+    healthBar.draw(target,states);
 }
 
 
 int Enemy::getHealth() const {
-    return health;
+    return healthBar.getHealth();
 }
 
 float Enemy::getSpeed() const {
@@ -47,15 +51,18 @@ int Enemy::getReward() const {
 }
 
 void Enemy::hit(const int damage) {
-
+    healthBar.hit(damage);
 }
 
 Enemy::Enemy(MapIterator trackStart,
              MapIterator trackEnd,
-             std::shared_ptr<sf::Texture> texture, int health, int damage, int reward, float speed)
+             std::shared_ptr<sf::Texture> texture,
+             std::vector<std::shared_ptr<sf::Texture>> &healthBarTextures,
+             int health, int damage, int reward, float speed)
         : currentTarget(trackStart), trackEnd(trackEnd),
-          timeOnCurrentPath(0), timeTillNextPath(0), health(health), damage(damage),reward(reward),speed(speed), texture(texture) {
-    sprite = sf::Sprite(*(this->texture));
+          timeOnCurrentPath(0), timeTillNextPath(0), healthBar(health, healthBarTextures), damage(damage),reward(reward),speed(speed), texture(
+                std::move(texture)) {
+    sprite.setTexture(*this->texture);
     sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);
     startNewMovePath(true);
 }
@@ -92,21 +99,4 @@ void Enemy::startNewMovePath(const bool starting) {
 
 bool Enemy::hasHitEnd() {
     return hitEnd;
-}
-
-Enemy &Enemy::operator=(const Enemy &other) {
-    health = other.health;
-    damage = other.damage;
-    reward = other.reward;
-    speed = other.speed;
-    timeOnCurrentPath = other.timeOnCurrentPath;
-    timeTillNextPath = other.timeTillNextPath;
-    texture = other.texture;
-    x_angle = other.x_angle;
-    y_angle = other.y_angle;
-    sprite = other.sprite;
-    currentTarget = other.currentTarget;
-    trackEnd = other.trackEnd;
-    hitEnd = other.hitEnd;
-    return *this;
 }

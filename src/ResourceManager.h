@@ -9,14 +9,14 @@
 #include <map>
 #include <SFML/Graphics/Texture.hpp>
 #include <memory>
-#include <string.h>
 
 enum ResourceIdentifier
 {
     enemy,
-    FireAnimation,
-    SmokeAnimation,
-    FloorTile,
+    HealthA,
+    HealthB,
+    HealthC,
+    HealthF
 };
 
 class ResourceManager
