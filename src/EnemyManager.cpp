@@ -22,13 +22,9 @@ void EnemyManager::update(float delta) {
     }
 }
 
-EnemyManager::EnemyManager(const Map &map, GameStateManager &gameStateManager) : map(map),
-                                                                                 gameStateManager(gameStateManager) {
-    sf::Texture texture;
-    if (!texture.loadFromFile("../img/logo.png")) {
-        exit(1);
-    }
-    enemies.emplace_back(map.begin(), map.end(), texture, 10, 10, 10);
+EnemyManager::EnemyManager(const Map &map, GameStateManager &gameStateManager, ResourceManager &resourceManager) : map(map),
+                                                                                 gameStateManager(gameStateManager), resourceManager(resourceManager) {
+
 }
 
 const std::vector<Enemy> &EnemyManager::getEnemies() const {
@@ -38,5 +34,11 @@ const std::vector<Enemy> &EnemyManager::getEnemies() const {
 void EnemyManager::draw(sf::RenderTarget &target, sf::RenderStates states) {
     for (const auto &enemy: enemies)
         enemy.draw(target, states);
+}
+
+void EnemyManager::makeEnemies() {
+    for (int i = 0; i < 10; i++) {
+        enemies.emplace_back(map.begin(), map.end(), resourceManager.GetTexture(ResourceIdentifier::enemy), 10, 10, 10, i * 100);
+    }
 }
 

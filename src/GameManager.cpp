@@ -9,8 +9,10 @@
 #include "SFML/Graphics/Text.hpp"
 
 GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.getSize()), towerManager(map),
-                                                     gameStateManager(100, 10), enemyManager(map, gameStateManager) {
-
+                                                     gameStateManager(100, 10),
+                                                     enemyManager(map, gameStateManager, resourceManager) {
+    loadTextures();
+    enemyManager.makeEnemies();
     gameStateManager.start();
     sf::Font font;
     if (!font.loadFromFile("../font/ApexMk2-Regular.otf")) {
@@ -60,4 +62,8 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
         clock.restart();
         window.display();
     }
+}
+
+void GameManager::loadTextures() {
+    resourceManager.LoadTexture(ResourceIdentifier::enemy, "../img/logo.png");
 }
