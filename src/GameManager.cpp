@@ -23,6 +23,7 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
     text.setCharacterSize(24);
     text.setFillColor(sf::Color::Red);
     clock.restart();
+    soundManager.play("../music/test.ogg");
     while (window.isOpen()) {
         float delta = clock.getElapsedTime().asSeconds();
         text.setString(std::to_string(static_cast<int>(1.0f / delta))); //fps
@@ -54,6 +55,8 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
             towerManager.update(delta);
             enemyManager.update(delta);
             projectileManager.update(enemyManager.getEnemies(), delta);
+        } else {
+            soundManager.start();
         }
         window.clear(sf::Color::Black);
         map.draw(window, sf::RenderStates::Default);
