@@ -22,7 +22,7 @@ public:
     MapIterator begin() const;
     MapIterator end() const;
 public:
-    explicit Map(const sf::Vector2u &screenSize);
+    explicit Map(const sf::Vector2u &screenSize, const float &percentScreenTake);
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

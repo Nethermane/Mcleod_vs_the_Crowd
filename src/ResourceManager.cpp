@@ -16,4 +16,28 @@ std::shared_ptr<sf::Texture> ResourceManager::GetTexture(ResourceIdentifier id) 
     return (*m_Textures.find(id)).second;
 }
 
-ResourceManager::ResourceManager() = default;
+std::shared_ptr<sf::Font> ResourceManager::LoadFont(ResourceIdentifier id, const std::string &file) {
+    std::shared_ptr<sf::Font> font = std::make_shared<sf::Font>();
+    (*font).loadFromFile(file);
+    m_Fonts.emplace(id, font);
+    return font;
+}
+
+std::shared_ptr<sf::Font> ResourceManager::GetFont(ResourceIdentifier id) const {
+    return (*m_Fonts.find(id)).second;
+}
+
+ResourceManager::ResourceManager() {
+        LoadTexture(ResourceIdentifier::enemy_1, "../img/enemy_1.png");
+        LoadTexture(ResourceIdentifier::enemy_2, "../img/enemy_2.png");
+        LoadTexture(ResourceIdentifier::enemy_3, "../img/enemy_3.png");
+        LoadTexture(ResourceIdentifier::enemy_4, "../img/enemy_4.png");
+        LoadTexture(ResourceIdentifier::enemy_5, "../img/enemy_5.png");
+        LoadTexture(ResourceIdentifier::HealthA, "../img/Health_A.png");
+        LoadTexture(ResourceIdentifier::HealthB, "../img/Health_B.png");
+        LoadTexture(ResourceIdentifier::HealthC, "../img/Health_C.png");
+        LoadTexture(ResourceIdentifier::HealthF, "../img/Health_F.png");
+        LoadTexture(ResourceIdentifier::mcleod, "../img/McLeod.png");
+        LoadFont(ResourceIdentifier::apex, "../font/ApexMk2-Regular.otf");
+    
+}
