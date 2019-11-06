@@ -14,11 +14,12 @@ void InGameMenu::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(background);
     target.draw(outlineMoney);
     target.draw(outlineUpgrade);
-    target.draw(outlineHealth);
     target.draw(outlineTower1);
     target.draw(outlineTower2);
     target.draw(outlineTower3);
     target.draw(outlineTower4);
+    target.draw(healthBar);
+    target.draw(outlineHealth);
     target.draw(money);
     target.draw(cost1);
     target.draw(cost2);
@@ -205,20 +206,26 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     outlineUpgrade.setPosition(upgrade.getPosition().x, upgrade.getPosition().y + upgrade.getLocalBounds().height / 2);
 
     healthText.setFont(*resourceManager.GetFont(ResourceIdentifier::apex));
-    healthText.setCharacterSize(30);
+    healthText.setCharacterSize(50);
     healthText.setString(
             std::to_string(gameStateManager.getMaxHealth()) + "/" + std::to_string(gameStateManager.getHealth()));
     healthText.setFillColor(sf::Color::Black);
     healthText.setOrigin(healthText.getLocalBounds().width / 2, healthText.getLocalBounds().height / 2);
     healthText.setPosition(center_horizontal, screenSize.y * 0.9f);
 
-    outlineHealth.setSize(sf::Vector2f(screenSize.x * 0.25f, healthText.getLocalBounds().height + padding));
+    healthBar.setShowBackgroundAndFrame(true);
+    healthBar.setSize(sf::Vector2f(screenSize.x * 0.25f, healthText.getLocalBounds().height + padding));
+    healthBar.setOrigin(healthBar.getLocalBounds().width / 2, healthBar.getLocalBounds().height / 2);
+    healthBar.setPosition(healthText.getPosition().x, healthText.getPosition().y + healthText.getLocalBounds().height/2);
+    healthBar.setColor(sf::Color(124, 252, 0, 255));
+    healthBar.setBackgroundColor(sf::Color(220, 20, 60, 255));
+
+    outlineHealth.setSize(sf::Vector2f(healthBar.getSize().x, healthBar.getSize().y));
     outlineHealth.setOrigin(outlineHealth.getLocalBounds().width / 2, outlineHealth.getLocalBounds().height / 2);
     outlineHealth.setOutlineColor(sf::Color::Black);
-    outlineHealth.setFillColor(sf::Color(124, 252, 0, 100));
+    outlineHealth.setFillColor(sf::Color::Transparent);
     outlineHealth.setOutlineThickness(2);
-    outlineHealth.setPosition(healthText.getPosition().x,
-                              healthText.getPosition().y + healthText.getLocalBounds().height / 2);
+    outlineHealth.setPosition(healthBar.getPosition().x -1, healthBar.getPosition().y-1);
 }
 
 void InGameMenu::update(const float &delta) {
@@ -239,9 +246,12 @@ void InGameMenu::deselectTower() {
 }
 
 void InGameMenu::updateHealth() {
-    if (gameStateManager.getHealth() * 100 / gameStateManager.getMaxHealth() <= 50) {
-        outlineHealth.setFillColor(sf::Color(220, 20, 60, 100));
-    }
+    int currHealth = gameStateManager.getHealth();
+    if(currHealth < 0)
+        healthText.setString("0/" + std::to_string(gameStateManager.getMaxHealth()));
+    else
+        healthText.setString(std::to_string(currHealth) + "/" + std::to_string(gameStateManager.getMaxHealth()));
+    healthBar.setRatio(currHealth * 1.0f / gameStateManager.getMaxHealth());
 }
 
 void InGameMenu::updateMoney() {
@@ -276,7 +286,7 @@ MenuButtonPresses InGameMenu::menuClick(sf::Vector2i clickPosition) {
             return Mute;
         }
     else if (background.getGlobalBounds().contains(clickPositionFloat)) {
-            MenuBackground;
+            return MenuBackground;
     } else
         return None;
 

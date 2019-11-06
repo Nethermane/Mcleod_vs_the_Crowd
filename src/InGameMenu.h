@@ -13,6 +13,8 @@
 #include "ResourceManager.h"
 #include "GameStateManager.h"
 #include "Tower.h"
+#include "SelbaWard/ProgressBar.hpp"
+
 enum MenuButtonPresses {
     None, Tower1,Tower2,Tower3,Tower4,Upgrade, Pause, Options, Mute, UnMute, MenuBackground
 
@@ -23,6 +25,7 @@ class InGameMenu : sf::Drawable {
     sf::RectangleShape background, outlineMoney, outlineUpgrade, outlineHealth, outlineTower1, outlineTower2, outlineTower3, outlineTower4;
     sf::Text fps_counter, money, cost1, cost2, cost3, cost4, upgrade, healthText;
     sf::Sprite tower1, tower2, tower3, tower4, pause, sound, options;
+    sw::ProgressBar healthBar;
     float padding,
             top,
             bottom,
