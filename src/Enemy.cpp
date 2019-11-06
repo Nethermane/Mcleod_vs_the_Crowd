@@ -30,7 +30,6 @@ void Enemy::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     if (hitEnd)
         return;
     target.draw(sprite);
-    healthBar.draw(target,states);
 }
 
 
@@ -100,4 +99,8 @@ void Enemy::startNewMovePath(const bool starting) {
 
 bool Enemy::hasHitEnd() {
     return hitEnd;
+}
+
+HealthBar Enemy::getHealthBar() const {
+    return healthBar;
 }
