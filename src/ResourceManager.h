@@ -9,6 +9,7 @@
 #include <map>
 #include <SFML/Graphics/Texture.hpp>
 #include <memory>
+#include <SFML/Graphics/Font.hpp>
 
 enum ResourceIdentifier
 {
@@ -20,18 +21,24 @@ enum ResourceIdentifier
     HealthA,
     HealthB,
     HealthC,
-    HealthF
+    HealthF,
+    apex,
+    mcleod
 };
 
 class ResourceManager
 {
 private:
     std::map<ResourceIdentifier, std::shared_ptr<sf::Texture>> m_Textures;
+    std::map<ResourceIdentifier, std::shared_ptr<sf::Font>> m_Fonts;
 public:
     ResourceManager();
     std::shared_ptr<sf::Texture> LoadTexture(ResourceIdentifier id, const std::string& file);
+    std::shared_ptr<sf::Font> LoadFont(ResourceIdentifier id, const std::string& file);
 
     std::shared_ptr<sf::Texture> GetTexture(ResourceIdentifier id) const;
+    std::shared_ptr<sf::Font> GetFont(ResourceIdentifier id) const;
+
 };
 
 

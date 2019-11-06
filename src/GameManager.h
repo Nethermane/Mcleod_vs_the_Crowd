@@ -12,12 +12,14 @@
 #include "GameStateManager.h"
 #include "SoundManager.h"
 #include "ResourceManager.h"
+#include "InGameMenu.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 
 class GameManager {
 private:
     sf::RenderWindow &window;
     sf::Clock clock;
+    ResourceManager resourceManager;
     Map map;
     EnemyManager enemyManager;
     TowerManager towerManager;
@@ -25,10 +27,8 @@ private:
     UIManager uiManager;
     GameStateManager gameStateManager;
     SoundManager soundManager;
-
-    ResourceManager resourceManager;
-    void loadTextures();
-
+    InGameMenu ingameMenu;
+    sf::IntRect gameClickHitBox, menuClickHitBox;
 
 public:
     explicit GameManager(sf::RenderWindow &window);

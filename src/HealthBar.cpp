@@ -30,7 +30,6 @@ void HealthBar::updateGraphic() {
         }
     }
     if (currSection != oldSection) {
-        std::cout<<currSection<<std::endl;
         sprite.setTexture(*(textures.at(static_cast<unsigned long long int>(currSection))));
         sprite.setScale(0.2, 0.2);
         sprite.setOrigin(sprite.getGlobalBounds().width / 2, sprite.getGlobalBounds().height / 2);

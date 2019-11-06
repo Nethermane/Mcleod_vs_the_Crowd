@@ -8,25 +8,20 @@
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/Text.hpp"
 
-GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.getSize()), towerManager(map),
-                                                     gameStateManager(100, 10),
-                                                     enemyManager(map, gameStateManager, resourceManager) {
-    loadTextures();
+GameManager::GameManager(sf::RenderWindow &window) :
+        resourceManager(), window(window), gameStateManager(100, 10),
+        gameClickHitBox(0, 0, static_cast<int>(window.getSize().x * 0.7f), window.getSize().y),
+        menuClickHitBox(static_cast<int>(window.getSize().x * 0.7f), 0, static_cast<int>(window.getSize().x * 0.3f),
+                        window.getSize().y),
+        ingameMenu(window.getSize(), 0.3f, resourceManager, gameStateManager),
+        map(window.getSize(), 0.7f), towerManager(map), enemyManager(map, gameStateManager, resourceManager) {
     enemyManager.loadEnemyTextures();
     gameStateManager.start();
-    sf::Font font;
-    if (!font.loadFromFile("../font/ApexMk2-Regular.otf")) {
-        // error...
-    }
-    sf::Text text;
-    text.setFont(font);
-    text.setCharacterSize(24);
-    text.setFillColor(sf::Color::Red);
+    gameStateManager.setMoney(10);
     clock.restart();
     soundManager.play("../music/test.ogg");
     while (window.isOpen()) {
         float delta = clock.getElapsedTime().asSeconds();
-        text.setString(std::to_string(static_cast<int>(1.0f / delta))); //fps
         sf::Event event{};
         while (window.pollEvent(event)) {
             switch (event.type) {
@@ -42,44 +37,49 @@ GameManager::GameManager(sf::RenderWindow &window) : window(window), map(window.
                             break;
                         case sf::Keyboard::P:
                             gameStateManager.togglePause();
-                            if(gameStateManager.isPaused())
+                            if (gameStateManager.isPaused())
                                 soundManager.pause();
                             else
                                 soundManager.resume();
+                            break;
                         case sf::Keyboard::E:
                             enemyManager.makeEnemies();
+                            break;
                         default:
                             break;
+                    }
+                    break;
+                case sf::Event::MouseButtonPressed:
+                    if (event.mouseButton.button == sf::Mouse::Left) {
+                        sf::Vector2i click = sf::Mouse::getPosition(window);
+                        if (menuClickHitBox.contains(click)) {
+                            MenuButtonPresses transactionType = ingameMenu.menuClick(click);
+                            if (transactionType == None) {
+                            } else if (transactionType == Upgrade) {
+                                //TODO: Handle upgrade
+                            } else {
+                                //TODO: Handle tower upgrading
+                            }
+                        } else if (gameClickHitBox.contains(click)) {
+                            //TODO: handle clicking in game. Select tower or place tower
+                        }
                     }
                     break;
                 default:
                     break;
             }
         }
-
         if (!gameStateManager.isPaused()) {
             towerManager.update(delta);
             enemyManager.update(delta);
             projectileManager.update(enemyManager.getEnemies(), delta);
         }
+        ingameMenu.update(delta);
         window.clear(sf::Color::Black);
         map.draw(window, sf::RenderStates::Default);
         enemyManager.draw(window, sf::RenderStates::Default);
-        window.draw(text);
+        ingameMenu.draw(window, sf::RenderStates::Default);
         clock.restart();
         window.display();
     }
-}
-
-void GameManager::loadTextures() {
-    resourceManager.LoadTexture(ResourceIdentifier::enemy_1, "../img/enemy_1.png");
-    resourceManager.LoadTexture(ResourceIdentifier::enemy_2, "../img/enemy_2.png");
-    resourceManager.LoadTexture(ResourceIdentifier::enemy_3, "../img/enemy_3.png");
-    resourceManager.LoadTexture(ResourceIdentifier::enemy_4, "../img/enemy_4.png");
-    resourceManager.LoadTexture(ResourceIdentifier::enemy_5, "../img/enemy_5.png");
-    resourceManager.LoadTexture(ResourceIdentifier::HealthA, "../img/Health_A.png");
-    resourceManager.LoadTexture(ResourceIdentifier::HealthB, "../img/Health_B.png");
-    resourceManager.LoadTexture(ResourceIdentifier::HealthC, "../img/Health_C.png");
-    resourceManager.LoadTexture(ResourceIdentifier::HealthF, "../img/Health_F.png");
-
 }
