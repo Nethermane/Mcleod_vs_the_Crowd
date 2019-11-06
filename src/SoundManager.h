@@ -17,8 +17,11 @@ class SoundManager {
         void pause();
         void resume();
         void stop();
+        void mute();
+        void unMute();
     private:
         sf::Music music;
+        float volume{100};
 
 };
 

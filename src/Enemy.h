@@ -39,6 +39,8 @@ public:
 
     bool hasHitEnd();
 
+    HealthBar getHealthBar() const;
+
 
 public:
     void update(float delta);
