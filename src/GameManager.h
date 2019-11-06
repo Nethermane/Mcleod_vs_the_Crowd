@@ -28,6 +28,7 @@ private:
     GameStateManager gameStateManager;
     SoundManager soundManager;
     InGameMenu ingameMenu;
+    sf::IntRect gameClickHitBox, menuClickHitBox;
 
 public:
     explicit GameManager(sf::RenderWindow &window);

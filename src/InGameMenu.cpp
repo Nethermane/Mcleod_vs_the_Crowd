@@ -9,6 +9,7 @@
 #include <iostream>
 #include <SFML/Graphics/Rect.hpp>
 
+
 void InGameMenu::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(background);
     target.draw(fps_counter);
@@ -48,7 +49,6 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     row1 = screenSize.y*0.35f;
     row2 = screenSize.y*0.65f;
     thirdWidth = (windowEnd-windowStart)/3.0f;
-    playableArea = sf::Vector2u(static_cast<unsigned int>(windowStart), static_cast<unsigned int>(bottom + padding));
 
     background.setFillColor(sf::Color::White);
     background.setOutlineColor(sf::Color::Black);
@@ -193,6 +193,8 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
 
 void InGameMenu::update(const float &delta) {
     fps_counter.setString(std::to_string(static_cast<int>(1.0f / delta)));
+    updateHealth();
+    updateMoney();
 }
 
 void InGameMenu::selectTower(const Tower &tower) {
@@ -215,4 +217,22 @@ void InGameMenu::updateHealth() {
 void InGameMenu::updateMoney() {
     money.setString("McClout: " + std::to_string(gameStateManager.getMoney()));
     money.setOrigin(money.getLocalBounds().width / 2, money.getLocalBounds().height / 2);
+}
+
+MenuButtonPresses InGameMenu::menuClick(sf::Vector2i clickPosition) {
+    sf::Vector2f clickPositionFloat = sf::Vector2f(clickPosition);
+    if(outlineTower1.getGlobalBounds().contains(clickPositionFloat))
+        return Tower1;
+    else if(outlineTower2.getGlobalBounds().contains(clickPositionFloat))
+        return Tower2;
+    else if(outlineTower3.getGlobalBounds().contains(clickPositionFloat))
+        return Tower3;
+    else if(outlineTower4.getGlobalBounds().contains(clickPositionFloat))
+        return Tower4;
+    else if(outlineUpgrade.getGlobalBounds().contains(clickPositionFloat))
+        return Upgrade;
+    else
+        return None;
+
+
 }

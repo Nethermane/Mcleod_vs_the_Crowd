@@ -13,7 +13,10 @@
 #include "ResourceManager.h"
 #include "GameStateManager.h"
 #include "Tower.h"
+enum MenuButtonPresses {
+    None, Tower1,Tower2,Tower3,Tower4,Upgrade
 
+};
 class InGameMenu : sf::Drawable {
     ResourceManager &resourceManager;
     GameStateManager &gameStateManager;
@@ -32,12 +35,13 @@ class InGameMenu : sf::Drawable {
             row2,
             thirdWidth;
 public:
-    sf::Vector2u playableArea;
     InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, ResourceManager &resourceManager, GameStateManager &gameStateManager);
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
     void update(const float &delta);
+
+    MenuButtonPresses menuClick(sf::Vector2i clickPosition);
 
     void selectTower(const Tower &tower);
 

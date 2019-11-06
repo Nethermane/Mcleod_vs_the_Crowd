@@ -10,6 +10,9 @@
 
 GameManager::GameManager(sf::RenderWindow &window) :
         resourceManager(), window(window), gameStateManager(100, 10),
+        gameClickHitBox(0, 0, static_cast<int>(window.getSize().x * 0.7f), window.getSize().y),
+        menuClickHitBox(static_cast<int>(window.getSize().x * 0.7f), 0, static_cast<int>(window.getSize().x * 0.3f),
+                        window.getSize().y),
         ingameMenu(window.getSize(), 0.3f, resourceManager, gameStateManager),
         map(window.getSize(), 0.7f), towerManager(map), enemyManager(map, gameStateManager, resourceManager) {
     enemyManager.loadEnemyTextures();
@@ -44,6 +47,22 @@ GameManager::GameManager(sf::RenderWindow &window) :
                             break;
                         default:
                             break;
+                    }
+                    break;
+                case sf::Event::MouseButtonPressed:
+                    if (event.mouseButton.button == sf::Mouse::Left) {
+                        sf::Vector2i click = sf::Mouse::getPosition(window);
+                        if (menuClickHitBox.contains(click)) {
+                            MenuButtonPresses transactionType = ingameMenu.menuClick(click);
+                            if (transactionType == None) {
+                            } else if (transactionType == Upgrade) {
+                                //TODO: Handle upgrade
+                            } else {
+                                //TODO: Handle tower upgrading
+                            }
+                        } else if (gameClickHitBox.contains(click)) {
+                            //TODO: handle clicking in game. Select tower or place tower
+                        }
                     }
                     break;
                 default:
