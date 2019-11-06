@@ -23,7 +23,11 @@ enum ResourceIdentifier
     HealthC,
     HealthF,
     apex,
-    mcleod
+    mcleod,
+    sound,
+    pause,
+    mute,
+    options
 };
 
 class ResourceManager

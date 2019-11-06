@@ -14,7 +14,7 @@
 #include "GameStateManager.h"
 #include "Tower.h"
 enum MenuButtonPresses {
-    None, Tower1,Tower2,Tower3,Tower4,Upgrade
+    None, Tower1,Tower2,Tower3,Tower4,Upgrade, Pause, Options, Mute, UnMute, MenuBackground
 
 };
 class InGameMenu : sf::Drawable {
@@ -22,7 +22,7 @@ class InGameMenu : sf::Drawable {
     GameStateManager &gameStateManager;
     sf::RectangleShape background, outlineMoney, outlineUpgrade, outlineHealth, outlineTower1, outlineTower2, outlineTower3, outlineTower4;
     sf::Text fps_counter, money, cost1, cost2, cost3, cost4, upgrade, healthText;
-    sf::Sprite tower1, tower2, tower3, tower4;
+    sf::Sprite tower1, tower2, tower3, tower4, pause, sound, options;
     float padding,
             top,
             bottom,
@@ -34,6 +34,7 @@ class InGameMenu : sf::Drawable {
             row1,
             row2,
             thirdWidth;
+    bool muteState = false;
 public:
     InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, ResourceManager &resourceManager, GameStateManager &gameStateManager);
 

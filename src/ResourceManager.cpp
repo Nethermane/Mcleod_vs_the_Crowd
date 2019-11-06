@@ -38,6 +38,10 @@ ResourceManager::ResourceManager() {
         LoadTexture(ResourceIdentifier::HealthC, "../img/Health_C.png");
         LoadTexture(ResourceIdentifier::HealthF, "../img/Health_F.png");
         LoadTexture(ResourceIdentifier::mcleod, "../img/McLeod.png");
+        LoadTexture(ResourceIdentifier::sound, "../img/sound.png");
+        LoadTexture(ResourceIdentifier::mute, "../img/mute.png");
+        LoadTexture(ResourceIdentifier::pause, "../img/pause.png");
+        LoadTexture(ResourceIdentifier::options, "../img/gear.png");
         LoadFont(ResourceIdentifier::apex, "../font/ApexMk2-Regular.otf");
     
 }

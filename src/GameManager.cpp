@@ -35,13 +35,6 @@ GameManager::GameManager(sf::RenderWindow &window) :
                         case sf::Keyboard::Q :
                             window.close();
                             break;
-                        case sf::Keyboard::P:
-                            gameStateManager.togglePause();
-                            if (gameStateManager.isPaused())
-                                soundManager.pause();
-                            else
-                                soundManager.resume();
-                            break;
                         case sf::Keyboard::E:
                             enemyManager.makeEnemies();
                             break;
@@ -52,15 +45,23 @@ GameManager::GameManager(sf::RenderWindow &window) :
                 case sf::Event::MouseButtonPressed:
                     if (event.mouseButton.button == sf::Mouse::Left) {
                         sf::Vector2i click = sf::Mouse::getPosition(window);
-                        if (menuClickHitBox.contains(click)) {
-                            MenuButtonPresses transactionType = ingameMenu.menuClick(click);
-                            if (transactionType == None) {
-                            } else if (transactionType == Upgrade) {
-                                //TODO: Handle upgrade
-                            } else {
-                                //TODO: Handle tower upgrading
-                            }
-                        } else if (gameClickHitBox.contains(click)) {
+                        MenuButtonPresses transactionType = ingameMenu.menuClick(click);
+                        if (transactionType == None) {
+                        } else if (transactionType == Pause) {
+                            gameStateManager.togglePause();
+                        } else if (transactionType == Mute) {
+                            soundManager.mute();
+                        } else if (transactionType == UnMute) {
+                            soundManager.unMute();
+                        } else if (transactionType == Options) {
+                            //TODO: Handle options
+                        } else if (transactionType == Upgrade) {
+                            //TODO: Handle upgrade
+                        } else {
+                            //TODO: Handle tower upgrading
+                        }
+                        //Click was somewhere on game field
+                        if(transactionType == None && gameClickHitBox.contains(click)) {
                             //TODO: handle clicking in game. Select tower or place tower
                         }
                     }

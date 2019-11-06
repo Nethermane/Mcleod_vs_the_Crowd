@@ -40,3 +40,11 @@ int SoundManager::change(std::string filename) {
     this->play(std::move(filename));
     return 1;
 }
+
+void SoundManager::mute() {
+    music.setVolume(0);
+}
+
+void SoundManager::unMute() {
+    music.setVolume(volume);
+}
