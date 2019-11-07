@@ -54,3 +54,7 @@ void HealthBar::update(const sf::Sprite &toFollow) {
     sprite.setPosition(toFollow.getPosition().x - sprite.getGlobalBounds().width/2, toFollow.getPosition().y - toFollow.getGlobalBounds().height / 2 -
                                                  sprite.getGlobalBounds().height);
 }
+
+int HealthBar::getMaxHealth() const {
+    return max;
+}

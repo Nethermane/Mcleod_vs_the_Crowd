@@ -37,7 +37,9 @@ public:
 
     void hit(int damage);
 
-    bool hasHitEnd();
+    bool hasHitEnd() const;
+
+    bool isDamaged() const;
 
     HealthBar getHealthBar() const;
 
