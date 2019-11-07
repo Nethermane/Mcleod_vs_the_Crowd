@@ -13,6 +13,7 @@
 #include "SoundManager.h"
 #include "ResourceManager.h"
 #include "InGameMenu.h"
+#include "UpgradeManager.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 
 class GameManager {
@@ -28,6 +29,7 @@ private:
     GameStateManager gameStateManager;
     SoundManager soundManager;
     InGameMenu ingameMenu;
+    UpgradeManager upgradeManager;
     sf::IntRect gameClickHitBox, menuClickHitBox;
 
 public:

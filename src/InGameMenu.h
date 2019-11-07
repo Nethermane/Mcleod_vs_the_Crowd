@@ -15,10 +15,11 @@
 #include "Tower.h"
 #include "SelbaWard/ProgressBar.hpp"
 
-enum MenuButtonPresses {
-    None, Tower1,Tower2,Tower3,Tower4,Upgrade, Pause, Options, Mute, UnMute, MenuBackground
+enum class MenuButtonPresses {
+    None, Tower1, Tower2, Tower3, Tower4, Upgrade, Pause, Options, Mute, UnMute, MenuBackground
 
 };
+
 class InGameMenu : sf::Drawable {
     ResourceManager &resourceManager;
     GameStateManager &gameStateManager;
@@ -26,6 +27,7 @@ class InGameMenu : sf::Drawable {
     sf::Text fps_counter, money, cost1, cost2, cost3, cost4, upgrade, healthText;
     sf::Sprite tower1, tower2, tower3, tower4, pause, sound, options;
     sw::ProgressBar healthBar;
+    Tower *selectedTower;
     float padding,
             top,
             bottom,
@@ -39,7 +41,8 @@ class InGameMenu : sf::Drawable {
             thirdWidth;
     bool muteState = false;
 public:
-    InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, ResourceManager &resourceManager, GameStateManager &gameStateManager);
+    InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, ResourceManager &resourceManager,
+               GameStateManager &gameStateManager);
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
@@ -47,13 +50,17 @@ public:
 
     MenuButtonPresses menuClick(sf::Vector2i clickPosition);
 
-    void selectTower(const Tower &tower);
+    void selectTower(Tower &tower);
 
     void deselectTower();
 
     void updateHealth();
 
     void updateMoney();
+
+    void updateUpgrade();
+
+    Tower *getSelectedTower() const;
 };
 
 
