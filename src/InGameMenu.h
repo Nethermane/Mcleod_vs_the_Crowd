@@ -21,6 +21,7 @@ enum class MenuButtonPresses {
 };
 
 class InGameMenu : sf::Drawable {
+private:
     ResourceManager &resourceManager;
     GameStateManager &gameStateManager;
     sf::RectangleShape background, outlineMoney, outlineUpgrade, outlineHealth, outlineTower1, outlineTower2, outlineTower3, outlineTower4;
@@ -40,25 +41,30 @@ class InGameMenu : sf::Drawable {
             row2,
             thirdWidth;
     bool muteState = false;
-public:
-    InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, ResourceManager &resourceManager,
-               GameStateManager &gameStateManager);
-
-    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-
-    void update(const float &delta);
-
-    MenuButtonPresses menuClick(sf::Vector2i clickPosition);
-
-    void selectTower(Tower &tower);
-
-    void deselectTower();
-
     void updateHealth();
 
     void updateMoney();
 
     void updateUpgrade();
+public:
+    InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, ResourceManager &resourceManager,
+               GameStateManager &gameStateManager);
+
+    ///Renders all in game menu items
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+
+    ///Updates ui components based on game sate
+    void update(const float &delta);
+
+    ///Return what was clicked if clicking it is allowed
+    MenuButtonPresses menuClick(sf::Vector2i clickPosition);
+
+    ///Selects a tower, updates the ui component
+    ///@param tower the tower that is being selected
+    void selectTower(Tower &tower);
+
+    ///Clear the currently selected tower
+    void deselectTower();
 
     Tower *getSelectedTower() const;
 };

@@ -8,10 +8,8 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "Enemy.h"
 #include "SelbaWard/Spline.hpp"
-/**
- * The Map object represents the path which enemies take
- *
- */
+
+///The Map object represents the path which enemies take
 class Map : sf::Drawable{
 private:
     std::forward_list<sf::Vector2f> turningPoints;
