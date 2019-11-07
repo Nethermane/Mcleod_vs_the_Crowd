@@ -12,6 +12,7 @@
 #include "GameStateManager.h"
 #include "ResourceManager.h"
 
+///Class for managing all enemies, should only have a single instance
 class EnemyManager {
 private:
     std::vector<Enemy> enemies;
@@ -20,17 +21,21 @@ private:
     std::vector<std::shared_ptr<sf::Texture>> healthBarTextures;
     std::vector<std::shared_ptr<sf::Texture>> enemyTextures;
     const Map &map;
+    ///Generates a random enemy based on magic numbers
     void addRandomEnemy();
 public:
+    ///@returns list of all currently alive enemies
     const std::vector<Enemy> &getEnemies() const;
-
-public:
+    ///Updates all enemies. Lowers health if enemy reach end. Adds money if enemy killed.
     void update(float delta);
 
+    ///Constructor, adds textures to enemy/healthbar lists.
     explicit EnemyManager(const Map &map, GameStateManager &gameStateManager, ResourceManager &resourceManager);
 
-    void loadEnemyTextures();
+    ///Draws all enemies and their health bars
     void draw(sf::RenderTarget &target, sf::RenderStates states);
+
+    ///Temp testing method that releases a single enemy
     void makeEnemies();
 };
 

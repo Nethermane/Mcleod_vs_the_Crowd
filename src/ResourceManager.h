@@ -11,6 +11,7 @@
 #include <memory>
 #include <SFML/Graphics/Font.hpp>
 
+///Enum that allows other classes to get texture pointers simply
 enum ResourceIdentifier
 {
     enemy_1,
@@ -30,7 +31,7 @@ enum ResourceIdentifier
     options,
     pointer
 };
-
+///Class which loads resources all and allows others to access them
 class ResourceManager
 {
 private:

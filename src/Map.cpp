@@ -50,12 +50,6 @@ Map::Map(const sf::Vector2u &screenSize, const float &percentScreenTake) {
         }
         point = std::next(point, 1);
     }
-
-//    for(const sf::Vector2f &point: turningPoints)
-//        if(point == turningPoints.front()) {
-//
-//        } else if(point == turningPoints.end())
-//        spline.addVertex(point);
     spline.update();
 }
 

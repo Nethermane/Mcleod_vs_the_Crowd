@@ -5,17 +5,20 @@
 #ifndef FIGHTCLUB_GAMESTATEMANAGER_H
 #define FIGHTCLUB_GAMESTATEMANAGER_H
 
-enum GameState {
+///Enum for game state
+enum class GameState {
     PreGame = 0,
     Playing = 1,
     Round_Interim = 2,
     Lose = 3,
 };
 
+///Class that stores player health, round, and money
 class GameStateManager {
 private:
     int health, maxHealth, round, maxRound, money;
     bool paused;
+    GameState gameState;
 public:
     int getHealth() const;
 
@@ -41,14 +44,18 @@ public:
 
     void setGameState(GameState gameState);
 
+    ///Set playing true
     void start();
+
+    ///Pauses or un-pauses game state
     void togglePause();
 
     bool isPaused();
-    GameStateManager(int maxHealth, int maxRound);
 
-private:
-    GameState gameState;
+    ///Constructor for new game state manager
+    ///@param maxHealth the maximum health of the player
+    ///@param maxRound the maximum round for this game instance
+    GameStateManager(int maxHealth, int maxRound);
 
 };
 

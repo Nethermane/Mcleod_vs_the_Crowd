@@ -28,25 +28,6 @@ EnemyManager::EnemyManager(const Map &map, GameStateManager &gameStateManager, R
                   gameStateManager),
           resourceManager(
                   resourceManager) {
-}
-
-const std::vector<Enemy> &EnemyManager::getEnemies() const {
-    return enemies;
-}
-
-void EnemyManager::draw(sf::RenderTarget &target, sf::RenderStates states) {
-    for (const auto &enemy: enemies)
-        enemy.draw(target, states);
-    for(const auto &enemy: enemies)
-        if(enemy.isDamaged())
-            enemy.getHealthBar().draw(target,states);
-}
-
-void EnemyManager::makeEnemies() {
-    addRandomEnemy();
-}
-
-void EnemyManager::loadEnemyTextures() {
     enemyTextures.clear();
     enemyTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::enemy_1));
     enemyTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::enemy_2));
@@ -58,6 +39,24 @@ void EnemyManager::loadEnemyTextures() {
     healthBarTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::HealthC));
     healthBarTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::HealthB));
     healthBarTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::HealthA));
+}
+
+const std::vector<Enemy> &EnemyManager::getEnemies() const {
+    return enemies;
+}
+
+void EnemyManager::draw(sf::RenderTarget &target, sf::RenderStates states) {
+    for (const auto &enemy: enemies)
+        enemy.draw(target, states);
+    for(const auto &enemy: enemies)
+        if(enemy.isDamaged())
+            enemy.drawHealthBar(target, states);
+}
+
+void EnemyManager::makeEnemies() {
+    addRandomEnemy();
+    for (auto &enemy: enemies)
+        enemy.hit(1);
 }
 
 void EnemyManager::addRandomEnemy() {

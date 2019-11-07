@@ -8,31 +8,17 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <forward_list>
-
-class Tower;
-
-class Upgrade {
-private:
-    friend class UpgradeManager;
-
-    const int range, attackSpeed, level, upgradeCost, cost;
-
-    explicit Upgrade(const int &range, const int &attackSpeed, const int &level,
-                     const int &upgradeCost, const int &cost);
-
-    void apply(Tower &tower) const;
-
-public:
-    int getUpgradeCost() const;
-};
+#include "Upgrade.h"
 
 class Tower : sf::Sprite {
 public:
+    ///Returns true if tower has another upgrade available
     bool canUpgrade() const;
 
-    int getUpgradeCost() const;
+    ///Upgrades the tower,
+    void upgrade();
 
-    std::forward_list<Upgrade>::const_iterator getUpgrade();
+    int getUpgradeCost() const;
 
 private:
     int range, attackSpeed, rotation, lastAttack, cost, level;
@@ -42,6 +28,7 @@ private:
 
     std::forward_list<Upgrade>::const_iterator nextUpgrade;
     std::forward_list<Upgrade>::const_iterator upgradeEnd;
+
 };
 
 

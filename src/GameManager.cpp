@@ -12,9 +12,7 @@ GameManager::GameManager(sf::RenderWindow &window) :
         menuClickHitBox(static_cast<int>(window.getSize().x * 0.7f), 0, static_cast<int>(window.getSize().x * 0.3f),
                         window.getSize().y),
         ingameMenu(window.getSize(), 0.3f, resourceManager, gameStateManager),
-        map(window.getSize(), 0.7f), towerManager(map), enemyManager(map, gameStateManager, resourceManager),
-        upgradeManager() {
-    enemyManager.loadEnemyTextures();
+        map(window.getSize(), 0.7f), towerManager(map), enemyManager(map, gameStateManager, resourceManager) {
     gameStateManager.start();
     gameStateManager.setMoney(10);
     window.setMouseCursorVisible(false);
@@ -60,7 +58,7 @@ GameManager::GameManager(sf::RenderWindow &window) :
                             auto towerToUpgrade = *ingameMenu.getSelectedTower();
                             auto upgradeCost = (towerToUpgrade).getUpgradeCost();
                             if (towerToUpgrade.canUpgrade() && gameStateManager.getMoney() >= upgradeCost) {
-                                upgradeManager.upgrade(*ingameMenu.getSelectedTower());
+                                (*ingameMenu.getSelectedTower()).upgrade();
                                 gameStateManager.setMoney(gameStateManager.getMoney() - upgradeCost);
                             }
                         } else {
