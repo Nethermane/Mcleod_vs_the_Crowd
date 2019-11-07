@@ -13,9 +13,9 @@
 #include "SoundManager.h"
 #include "ResourceManager.h"
 #include "InGameMenu.h"
-#include "UpgradeManager.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 
+///Main game class that holds all aspects of the game
 class GameManager {
 private:
     sf::RenderWindow &window;
@@ -29,7 +29,6 @@ private:
     GameStateManager gameStateManager;
     SoundManager soundManager;
     InGameMenu ingameMenu;
-    UpgradeManager upgradeManager;
     sf::IntRect gameClickHitBox, menuClickHitBox;
 
 public:
