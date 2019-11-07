@@ -18,6 +18,8 @@ GameManager::GameManager(sf::RenderWindow &window) :
     enemyManager.loadEnemyTextures();
     gameStateManager.start();
     gameStateManager.setMoney(10);
+    window.setMouseCursorVisible(false);
+    sf::Sprite mouse(*resourceManager.GetTexture(ResourceIdentifier::pointer));
     clock.restart();
     soundManager.play("../music/test.ogg");
     while (window.isOpen()) {
@@ -70,6 +72,7 @@ GameManager::GameManager(sf::RenderWindow &window) :
                     break;
             }
         }
+        mouse.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
         if (!gameStateManager.isPaused()) {
             towerManager.update(delta);
             enemyManager.update(delta);
@@ -80,6 +83,7 @@ GameManager::GameManager(sf::RenderWindow &window) :
         map.draw(window, sf::RenderStates::Default);
         enemyManager.draw(window, sf::RenderStates::Default);
         ingameMenu.draw(window, sf::RenderStates::Default);
+        window.draw(mouse);
         clock.restart();
         window.display();
     }

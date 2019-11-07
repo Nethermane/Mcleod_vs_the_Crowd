@@ -27,7 +27,8 @@ enum ResourceIdentifier
     sound,
     pause,
     mute,
-    options
+    options,
+    pointer
 };
 
 class ResourceManager
