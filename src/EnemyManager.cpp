@@ -38,7 +38,8 @@ void EnemyManager::draw(sf::RenderTarget &target, sf::RenderStates states) {
     for (const auto &enemy: enemies)
         enemy.draw(target, states);
     for(const auto &enemy: enemies)
-        enemy.getHealthBar().draw(target,states);
+        if(enemy.isDamaged())
+            enemy.getHealthBar().draw(target,states);
 }
 
 void EnemyManager::makeEnemies() {

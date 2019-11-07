@@ -95,10 +95,14 @@ void Enemy::startNewMovePath(const bool starting) {
     timeOnCurrentPath = 0;
 }
 
-bool Enemy::hasHitEnd() {
+bool Enemy::hasHitEnd() const {
     return hitEnd;
 }
 
 HealthBar Enemy::getHealthBar() const {
     return healthBar;
+}
+
+bool Enemy::isDamaged() const {
+    return healthBar.getHealth() < healthBar.getMaxHealth();
 }

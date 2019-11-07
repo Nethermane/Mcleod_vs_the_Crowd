@@ -23,6 +23,7 @@ public:
     int getHealth() const;
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
+    int getMaxHealth() const;
 };
 
 
