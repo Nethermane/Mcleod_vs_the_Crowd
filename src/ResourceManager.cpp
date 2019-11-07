@@ -42,6 +42,7 @@ ResourceManager::ResourceManager() {
         LoadTexture(ResourceIdentifier::mute, "../img/mute.png");
         LoadTexture(ResourceIdentifier::pause, "../img/pause.png");
         LoadTexture(ResourceIdentifier::options, "../img/gear.png");
+        LoadTexture(ResourceIdentifier::pointer, "../img/pointer.png");
         LoadFont(ResourceIdentifier::apex, "../font/ApexMk2-Regular.otf");
     
 }
