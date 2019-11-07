@@ -5,8 +5,6 @@
 #include <iostream>
 #include "GameManager.h"
 #include "SFML/Window/Event.hpp"
-#include "SFML/Graphics/Font.hpp"
-#include "SFML/Graphics/Text.hpp"
 
 GameManager::GameManager(sf::RenderWindow &window) :
         resourceManager(), window(window), gameStateManager(100, 10),
@@ -14,7 +12,8 @@ GameManager::GameManager(sf::RenderWindow &window) :
         menuClickHitBox(static_cast<int>(window.getSize().x * 0.7f), 0, static_cast<int>(window.getSize().x * 0.3f),
                         window.getSize().y),
         ingameMenu(window.getSize(), 0.3f, resourceManager, gameStateManager),
-        map(window.getSize(), 0.7f), towerManager(map), enemyManager(map, gameStateManager, resourceManager) {
+        map(window.getSize(), 0.7f), towerManager(map), enemyManager(map, gameStateManager, resourceManager),
+        upgradeManager() {
     enemyManager.loadEnemyTextures();
     gameStateManager.start();
     gameStateManager.setMoney(10);
@@ -48,22 +47,27 @@ GameManager::GameManager(sf::RenderWindow &window) :
                     if (event.mouseButton.button == sf::Mouse::Left) {
                         sf::Vector2i click = sf::Mouse::getPosition(window);
                         MenuButtonPresses transactionType = ingameMenu.menuClick(click);
-                        if (transactionType == None) {
-                        } else if (transactionType == Pause) {
+                        if (transactionType == MenuButtonPresses::None) {
+                        } else if (transactionType == MenuButtonPresses::Pause) {
                             gameStateManager.togglePause();
-                        } else if (transactionType == Mute) {
+                        } else if (transactionType == MenuButtonPresses::Mute) {
                             soundManager.mute();
-                        } else if (transactionType == UnMute) {
+                        } else if (transactionType == MenuButtonPresses::UnMute) {
                             soundManager.unMute();
-                        } else if (transactionType == Options) {
+                        } else if (transactionType == MenuButtonPresses::Options) {
                             //TODO: Handle options
-                        } else if (transactionType == Upgrade) {
-                            //TODO: Handle upgrade
+                        } else if (transactionType == MenuButtonPresses::Upgrade) {
+                            auto towerToUpgrade = *ingameMenu.getSelectedTower();
+                            auto upgradeCost = (towerToUpgrade).getUpgradeCost();
+                            if (towerToUpgrade.canUpgrade() && gameStateManager.getMoney() >= upgradeCost) {
+                                upgradeManager.upgrade(*ingameMenu.getSelectedTower());
+                                gameStateManager.setMoney(gameStateManager.getMoney() - upgradeCost);
+                            }
                         } else {
-                            //TODO: Handle tower upgrading
+                            //TODO: Handle tower buying
                         }
                         //Click was somewhere on game field
-                        if(transactionType == None && gameClickHitBox.contains(click)) {
+                        if (transactionType == MenuButtonPresses::None && gameClickHitBox.contains(click)) {
                             //TODO: handle clicking in game. Select tower or place tower
                         }
                     }

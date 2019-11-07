@@ -42,6 +42,7 @@ void InGameMenu::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, ResourceManager &resourceManager,
                        GameStateManager &gameStateManager)
         : resourceManager(resourceManager), gameStateManager(gameStateManager) {
+    selectedTower = nullptr;
     padding = screenSize.x * 0.02f;
     top = padding;
     bottom = screenSize.y - padding;
@@ -216,7 +217,8 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     healthBar.setShowBackgroundAndFrame(true);
     healthBar.setSize(sf::Vector2f(screenSize.x * 0.25f, healthText.getLocalBounds().height + padding));
     healthBar.setOrigin(healthBar.getLocalBounds().width / 2, healthBar.getLocalBounds().height / 2);
-    healthBar.setPosition(healthText.getPosition().x, healthText.getPosition().y + healthText.getLocalBounds().height/2);
+    healthBar.setPosition(healthText.getPosition().x,
+                          healthText.getPosition().y + healthText.getLocalBounds().height / 2);
     healthBar.setColor(sf::Color(124, 252, 0, 255));
     healthBar.setBackgroundColor(sf::Color(220, 20, 60, 255));
 
@@ -225,29 +227,37 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     outlineHealth.setOutlineColor(sf::Color::Black);
     outlineHealth.setFillColor(sf::Color::Transparent);
     outlineHealth.setOutlineThickness(2);
-    outlineHealth.setPosition(healthBar.getPosition().x -1, healthBar.getPosition().y-1);
+    outlineHealth.setPosition(healthBar.getPosition().x - 1, healthBar.getPosition().y - 1);
 }
 
 void InGameMenu::update(const float &delta) {
     fps_counter.setString(std::to_string(static_cast<int>(1.0f / delta)));
     updateHealth();
     updateMoney();
+    updateUpgrade();
 }
 
-void InGameMenu::selectTower(const Tower &tower) {
-    upgrade.setFillColor(sf::Color(0, 0, 0, 255));
-    outlineUpgrade.setFillColor(sf::Color(169, 169, 169, 255));
+void InGameMenu::selectTower(Tower &tower) {
+    selectedTower = &tower;
 
 }
 
 void InGameMenu::deselectTower() {
-    upgrade.setFillColor(sf::Color(0, 0, 0, 100));
-    outlineUpgrade.setFillColor(sf::Color(169, 169, 169, 100));
+    selectedTower = nullptr;
 }
+
+void InGameMenu::updateUpgrade() {
+    if(selectedTower != nullptr &&(*selectedTower).canUpgrade() && gameStateManager.getMoney() >= (*selectedTower).getUpgradeCost())
+        outlineUpgrade.setFillColor(sf::Color(169, 169, 169, 255));
+    else
+        outlineUpgrade.setFillColor(sf::Color(169, 169, 169, 100));
+
+}
+
 
 void InGameMenu::updateHealth() {
     int currHealth = gameStateManager.getHealth();
-    if(currHealth < 0)
+    if (currHealth < 0)
         healthText.setString("0/" + std::to_string(gameStateManager.getMaxHealth()));
     else
         healthText.setString(std::to_string(currHealth) + "/" + std::to_string(gameStateManager.getMaxHealth()));
@@ -262,33 +272,40 @@ void InGameMenu::updateMoney() {
 MenuButtonPresses InGameMenu::menuClick(sf::Vector2i clickPosition) {
     sf::Vector2f clickPositionFloat = sf::Vector2f(clickPosition);
     if (outlineTower1.getGlobalBounds().contains(clickPositionFloat))
-        return Tower1;
+        return MenuButtonPresses::Tower1;
     else if (outlineTower2.getGlobalBounds().contains(clickPositionFloat))
-        return Tower2;
+        return MenuButtonPresses::Tower2;
     else if (outlineTower3.getGlobalBounds().contains(clickPositionFloat))
-        return Tower3;
+        return MenuButtonPresses::Tower3;
     else if (outlineTower4.getGlobalBounds().contains(clickPositionFloat))
-        return Tower4;
+        return MenuButtonPresses::Tower4;
     else if (outlineUpgrade.getGlobalBounds().contains(clickPositionFloat))
-        return Upgrade;
+        if (selectedTower != nullptr)
+            return MenuButtonPresses::Upgrade;
+        else
+            return MenuButtonPresses::None;
     else if (pause.getGlobalBounds().contains(clickPositionFloat))
-        return Pause;
+        return MenuButtonPresses::Pause;
     else if (options.getGlobalBounds().contains(clickPositionFloat))
-        return Options;
+        return MenuButtonPresses::Options;
     else if (sound.getGlobalBounds().contains(clickPositionFloat))
         if (muteState) {
             sound.setTexture(*resourceManager.GetTexture(ResourceIdentifier::sound));
             muteState = !muteState;
-            return UnMute;
+            return MenuButtonPresses::UnMute;
         } else {
             sound.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mute));
             muteState = !muteState;
-            return Mute;
+            return MenuButtonPresses::Mute;
         }
     else if (background.getGlobalBounds().contains(clickPositionFloat)) {
-            return MenuBackground;
+        return MenuButtonPresses::MenuBackground;
     } else
-        return None;
+        return MenuButtonPresses::None;
 
 
+}
+
+Tower *InGameMenu::getSelectedTower() const {
+    return selectedTower;
 }
