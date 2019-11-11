@@ -20,6 +20,7 @@ void EnemyManager::update(float delta) {
             ++enemy;
         }
     }
+    round(2);
 }
 
 EnemyManager::EnemyManager(const Map &map, GameStateManager &gameStateManager, ResourceManager &resourceManager)
@@ -45,6 +46,28 @@ const std::vector<Enemy> &EnemyManager::getEnemies() const {
     return enemies;
 }
 
+void EnemyManager::round(int roundNum) {
+    bool roundInProgress = true;
+    bool calcsDone = false;
+    int numEnemies = 4 * roundNum + 1;
+    float enemyDelay = 3.0f / roundNum;
+    auto enemy = enemies.begin();
+    float lastCheck = clock.getElapsedTime().asSeconds();
+    if (lastCheck > enemyDelay) {
+        makeEnemies();
+        clock.restart();
+    }
+//    for (int e = 0; e < numEnemies; e++) {
+//        while (roundInProgress) {
+//            if (delta >= enemyDelay) {
+//                makeEnemies();
+//                clock.restart();
+//            }
+//        }
+//    }
+//    roundInProgress = false;
+}
+
 void EnemyManager::draw(sf::RenderTarget &target, sf::RenderStates states) {
     for (const auto &enemy: enemies)
         enemy.draw(target, states);
@@ -67,6 +90,7 @@ void EnemyManager::addRandomEnemy() {
     int speed = 100;
     enemies.emplace_back(map.begin(), map.end(), enemyTextures[level - 1], healthBarTextures,
                          health, damage, reward, speed);
+
 }
 
 

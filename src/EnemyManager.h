@@ -21,6 +21,7 @@ private:
     std::vector<std::shared_ptr<sf::Texture>> healthBarTextures;
     std::vector<std::shared_ptr<sf::Texture>> enemyTextures;
     const Map &map;
+    sf::Clock clock;
     ///Generates a random enemy based on magic numbers
     void addRandomEnemy();
 public:
@@ -28,6 +29,9 @@ public:
     const std::vector<Enemy> &getEnemies() const;
     ///Updates all enemies. Lowers health if enemy reach end. Adds money if enemy killed.
     void update(float delta);
+
+    ///Keeps track of enemy rounds/waves to ensure difficulty increases as level progresses.
+    void round(int roundNum);
 
     ///Constructor, adds textures to enemy/healthbar lists.
     explicit EnemyManager(const Map &map, GameStateManager &gameStateManager, ResourceManager &resourceManager);
