@@ -77,3 +77,8 @@ void Enemy::startNewMovePath() {
                                                     std::pow(second.y - first.y, 2)) / speed) - timeOnCurrentPath;
     timeOnCurrentPath = 0;
 }
+
+
+sf::Vector2f Enemy::getPosition() {
+    return sprite.getPosition();
+}

@@ -14,7 +14,7 @@ class EnemyManager {
 private:
     std::vector<Enemy> enemies;
 public:
-    const std::vector<Enemy> &getEnemies() const;
+    std::vector<Enemy> &getEnemies();
 
 private:
     const Map &map;

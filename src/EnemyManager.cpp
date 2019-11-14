@@ -20,7 +20,7 @@ EnemyManager::EnemyManager(const Map &map): map(map) {
     enemies.emplace_back(map.begin(), map.end(), texture);
 }
 
-const std::vector<Enemy> &EnemyManager::getEnemies() const {
+std::vector<Enemy> &EnemyManager::getEnemies() {
     return enemies;
 }
 

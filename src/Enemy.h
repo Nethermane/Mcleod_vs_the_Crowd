@@ -30,6 +30,8 @@ public:
 
     int getReward() const;
 
+    sf::Vector2f getPosition();
+
     void hit(int damage);
 
 public:
