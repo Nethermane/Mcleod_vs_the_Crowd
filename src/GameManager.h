@@ -13,7 +13,9 @@
 #include "SoundManager.h"
 #include "ResourceManager.h"
 #include "InGameMenu.h"
+#include "PurchaseManager.h"
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/CircleShape.hpp>
 
 ///Main game class that holds all aspects of the game
 class GameManager {
@@ -29,6 +31,7 @@ private:
     GameStateManager gameStateManager;
     SoundManager soundManager;
     InGameMenu ingameMenu;
+    PurchaseManager purchaseManager;
     sf::IntRect gameClickHitBox, menuClickHitBox;
 
 public:
