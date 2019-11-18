@@ -16,3 +16,8 @@ TowerManager::TowerManager(const Map &map): map(map) {
     tower1Upgrades.push_front(Upgrade(125, 10, 1, 25, 10));
     tower1Upgrades.push_front(Upgrade(100, 5, 0, 10, 10));
 }
+
+bool TowerManager::addTower(Tower t) {
+    this->towers.push_back(t);
+    return true;
+}
