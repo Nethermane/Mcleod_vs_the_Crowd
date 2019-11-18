@@ -5,9 +5,12 @@
 #ifndef FIGHTCLUB_TOWERMANAGER_H
 #define FIGHTCLUB_TOWERMANAGER_H
 
+#include <string>
+
 #include "Map.h"
 #include "Tower.h"
 #include "Upgrade.h"
+using std::string;
 
 /**
  * This class stores all towers and manages the creation of projectiles.
@@ -19,6 +22,7 @@ private:
 public:
     explicit TowerManager(const Map &map);
     void update(float delta);
+    Tower* createTower(sf:: Vector2f position, towerType type);
 };
 
 
