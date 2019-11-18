@@ -5,22 +5,28 @@
 #include <iostream>
 #include "EnemyManager.h"
 
-
 void EnemyManager::update(float delta) {
     auto enemy = enemies.begin();
     while (enemy != enemies.end()) {
         (*enemy).update(delta);
         if ((*enemy).hasHitEnd()) {
+            killedEnemies++;
+            std::cout<<"killed: "<<killedEnemies<<std::endl;
             gameStateManager.setHealth(gameStateManager.getHealth() - (*enemy).getDamage());
             enemy = enemies.erase(enemy);
         } else if ((*enemy).getHealth() <= 0) {
+            killedEnemies++;
+            std::cout<<"killed: "<<killedEnemies<<std::endl;
             gameStateManager.setMoney(gameStateManager.getMoney() + (*enemy).getReward());
             enemy = enemies.erase(enemy);
         } else {
             ++enemy;
         }
     }
-    round(2);
+    if (round1)
+        round(1);
+    else if (roundFinished)
+        roundOver(1);
 }
 
 EnemyManager::EnemyManager(const Map &map, GameStateManager &gameStateManager, ResourceManager &resourceManager)
@@ -47,25 +53,31 @@ const std::vector<Enemy> &EnemyManager::getEnemies() const {
 }
 
 void EnemyManager::round(int roundNum) {
-    bool roundInProgress = true;
-    bool calcsDone = false;
     int numEnemies = 4 * roundNum + 1;
+    int spawnedEnemies = getEnemies().size();
     float enemyDelay = 3.0f / roundNum;
     auto enemy = enemies.begin();
     float lastCheck = clock.getElapsedTime().asSeconds();
-    if (lastCheck > enemyDelay) {
+//    if (!roundInProgress)
+//        std::cout<<"Round over"<<std::endl;
+    if ((lastCheck >= enemyDelay) && (spawnedEnemies < numEnemies) && (!allSpawned)) {
         makeEnemies();
+        std::cout << "spawned: " << spawnedEnemies + 1 << std::endl;
         clock.restart();
     }
-//    for (int e = 0; e < numEnemies; e++) {
-//        while (roundInProgress) {
-//            if (delta >= enemyDelay) {
-//                makeEnemies();
-//                clock.restart();
-//            }
-//        }
-//    }
-//    roundInProgress = false;
+
+    if (spawnedEnemies == numEnemies)
+        allSpawned = true;
+
+    if (allSpawned && (killedEnemies == numEnemies)) {
+        round1 = false;
+        roundFinished = true;
+    }
+}
+
+void EnemyManager::roundOver(int roundNum) {
+    std::cout<<"Round "<<roundNum<<" over!"<<std::endl; // testing
+    roundFinished = false;
 }
 
 void EnemyManager::draw(sf::RenderTarget &target, sf::RenderStates states) {
@@ -79,7 +91,7 @@ void EnemyManager::draw(sf::RenderTarget &target, sf::RenderStates states) {
 void EnemyManager::makeEnemies() {
     addRandomEnemy();
     for (auto &enemy: enemies)
-        enemy.hit(1);
+        enemy.hit(2);
 }
 
 void EnemyManager::addRandomEnemy() {
