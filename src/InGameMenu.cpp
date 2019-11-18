@@ -13,6 +13,7 @@
 void InGameMenu::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(background);
     target.draw(outlineMoney);
+    target.draw(outlineRound);
     target.draw(outlineUpgrade);
     target.draw(outlineTower1);
     target.draw(outlineTower2);
@@ -21,6 +22,7 @@ void InGameMenu::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(healthBar);
     target.draw(outlineHealth);
     target.draw(money);
+    target.draw(round);
     target.draw(cost1);
     target.draw(cost2);
     target.draw(cost3);
@@ -101,6 +103,20 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     outlineMoney.setOutlineThickness(2);
     outlineMoney.setPosition(money.getPosition().x, money.getPosition().y + money.getLocalBounds().height / 2);
 
+    round.setFont(*resourceManager.GetFont(ResourceIdentifier::apex));
+    round.setCharacterSize(48);
+    round.setFillColor(sf::Color::Black);
+    round.setString("Round: " + std::to_string(gameStateManager.getRound()));
+    round.setOrigin(round.getLocalBounds().width / 2, round.getLocalBounds().height / 2);
+    round.setPosition(center_horizontal, outlineMoney.getPosition().y+round.getLocalBounds().height*2+padding);
+
+
+    outlineRound.setSize(sf::Vector2f(screenSize.x * 0.25f, round.getLocalBounds().height + padding));
+    outlineRound.setOrigin(outlineRound.getLocalBounds().width / 2, outlineRound.getLocalBounds().height / 2);
+    outlineRound.setOutlineColor(sf::Color::Black);
+    outlineRound.setFillColor(sf::Color::Transparent);
+    outlineRound.setOutlineThickness(2);
+    outlineRound.setPosition(round.getPosition().x, round.getPosition().y + round.getLocalBounds().height / 2);
 
     cost1.setFont(*resourceManager.GetFont(ResourceIdentifier::apex));
     cost1.setCharacterSize(25);
@@ -235,6 +251,7 @@ void InGameMenu::update(const float &delta) {
     updateHealth();
     updateMoney();
     updateUpgrade();
+    updateRound();
 }
 
 void InGameMenu::selectTower(Tower &tower) {
@@ -252,6 +269,10 @@ void InGameMenu::updateUpgrade() {
     else
         outlineUpgrade.setFillColor(sf::Color(169, 169, 169, 100));
 
+}
+
+void InGameMenu::updateRound() {
+    round.setString(std::to_string(gameStateManager.getRound()));
 }
 
 

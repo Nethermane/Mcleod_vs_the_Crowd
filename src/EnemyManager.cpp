@@ -11,12 +11,10 @@ void EnemyManager::update(float delta) {
         (*enemy).update(delta);
         if ((*enemy).hasHitEnd()) {
             killedEnemies++;
-            std::cout<<"killed: "<<killedEnemies<<std::endl;
             gameStateManager.setHealth(gameStateManager.getHealth() - (*enemy).getDamage());
             enemy = enemies.erase(enemy);
         } else if ((*enemy).getHealth() <= 0) {
             killedEnemies++;
-            std::cout<<"killed: "<<killedEnemies<<std::endl;
             gameStateManager.setMoney(gameStateManager.getMoney() + (*enemy).getReward());
             enemy = enemies.erase(enemy);
         } else {
@@ -24,9 +22,9 @@ void EnemyManager::update(float delta) {
         }
     }
     if (round1)
-        round(1);
+        round();
     else if (roundFinished)
-        roundOver(1);
+        roundOver();
 }
 
 EnemyManager::EnemyManager(const Map &map, GameStateManager &gameStateManager, ResourceManager &resourceManager)
@@ -52,17 +50,16 @@ const std::vector<Enemy> &EnemyManager::getEnemies() const {
     return enemies;
 }
 
-void EnemyManager::round(int roundNum) {
+void EnemyManager::round() {
+    int roundNum = gameStateManager.getRound();
     int numEnemies = 4 * roundNum + 1;
     int spawnedEnemies = getEnemies().size();
     float enemyDelay = 3.0f / roundNum;
     auto enemy = enemies.begin();
     float lastCheck = clock.getElapsedTime().asSeconds();
-//    if (!roundInProgress)
-//        std::cout<<"Round over"<<std::endl;
     if ((lastCheck >= enemyDelay) && (spawnedEnemies < numEnemies) && (!allSpawned)) {
         makeEnemies();
-        std::cout << "spawned: " << spawnedEnemies + 1 << std::endl;
+//        std::cout << "spawned: " << spawnedEnemies + 1 << std::endl; // testing
         clock.restart();
     }
 
@@ -75,9 +72,11 @@ void EnemyManager::round(int roundNum) {
     }
 }
 
-void EnemyManager::roundOver(int roundNum) {
-    std::cout<<"Round "<<roundNum<<" over!"<<std::endl; // testing
+void EnemyManager::roundOver() {
+    int roundNum = gameStateManager.getRound();
+    std::cout<<"Round "<<roundNum<<" over!"<<std::endl; // testing - should be a popup GUI window
     roundFinished = false;
+    gameStateManager.setRound(roundNum + 1);
 }
 
 void EnemyManager::draw(sf::RenderTarget &target, sf::RenderStates states) {
@@ -90,8 +89,8 @@ void EnemyManager::draw(sf::RenderTarget &target, sf::RenderStates states) {
 
 void EnemyManager::makeEnemies() {
     addRandomEnemy();
-    for (auto &enemy: enemies)
-        enemy.hit(2);
+//    for (auto &enemy: enemies) // testing
+//        enemy.hit(2);
 }
 
 void EnemyManager::addRandomEnemy() {
@@ -104,5 +103,3 @@ void EnemyManager::addRandomEnemy() {
                          health, damage, reward, speed);
 
 }
-
-

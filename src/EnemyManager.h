@@ -24,6 +24,13 @@ private:
     sf::Clock clock;
     ///Generates a random enemy based on magic numbers
     void addRandomEnemy();
+
+    ///Keeps track of enemy rounds/waves to ensure difficulty increases as level progresses.
+    void round();
+
+    ///Ends round.
+    void roundOver();
+
     bool round1 = true;
     bool roundFinished = false;
     bool allSpawned = false;
@@ -33,12 +40,6 @@ public:
     const std::vector<Enemy> &getEnemies() const;
     ///Updates all enemies. Lowers health if enemy reach end. Adds money if enemy killed.
     void update(float delta);
-
-    ///Keeps track of enemy rounds/waves to ensure difficulty increases as level progresses.
-    void round(int roundNum);
-
-    //Ends round.
-    void roundOver(int roundNum);
 
     ///Constructor, adds textures to enemy/healthbar lists.
     explicit EnemyManager(const Map &map, GameStateManager &gameStateManager, ResourceManager &resourceManager);

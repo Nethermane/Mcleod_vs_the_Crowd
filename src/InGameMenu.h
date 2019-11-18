@@ -24,8 +24,8 @@ class InGameMenu : sf::Drawable {
 private:
     ResourceManager &resourceManager;
     GameStateManager &gameStateManager;
-    sf::RectangleShape background, outlineMoney, outlineUpgrade, outlineHealth, outlineTower1, outlineTower2, outlineTower3, outlineTower4;
-    sf::Text fps_counter, money, cost1, cost2, cost3, cost4, upgrade, healthText;
+    sf::RectangleShape background, outlineMoney, outlineRound, outlineUpgrade, outlineHealth, outlineTower1, outlineTower2, outlineTower3, outlineTower4;
+    sf::Text fps_counter, money, round, cost1, cost2, cost3, cost4, upgrade, healthText;
     sf::Sprite tower1, tower2, tower3, tower4, pause, sound, options;
     sw::ProgressBar healthBar;
     Tower *selectedTower;
@@ -44,6 +44,8 @@ private:
     void updateHealth();
 
     void updateMoney();
+
+    void updateRound();
 
     void updateUpgrade();
 public:
