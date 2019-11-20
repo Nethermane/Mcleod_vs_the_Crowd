@@ -46,7 +46,7 @@ EnemyManager::EnemyManager(const Map &map, GameStateManager &gameStateManager, R
     healthBarTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::HealthA));
 }
 
-const std::vector<Enemy> &EnemyManager::getEnemies() const {
+std::vector<Enemy> &EnemyManager::getEnemies() {
     return enemies;
 }
 

@@ -35,9 +35,8 @@ GameManager::GameManager(sf::RenderWindow &window) :
                         case sf::Keyboard::Q :
                             window.close();
                             break;
-//                        case sf::Keyboard::E:
-//                            enemyManager.makeEnemies();
-//                            break;
+                        case sf::Keyboard::P:
+                            gameStateManager.togglePause();
                         default:
                             break;
                     }
@@ -85,6 +84,7 @@ GameManager::GameManager(sf::RenderWindow &window) :
         window.clear(sf::Color::Black);
         map.draw(window, sf::RenderStates::Default);
         enemyManager.draw(window, sf::RenderStates::Default);
+        projectileManager.draw(window, sf::RenderStates::Default);
         ingameMenu.draw(window, sf::RenderStates::Default);
         towerManager.draw(window, sf::RenderStates::Default);
         window.draw(mouse);
