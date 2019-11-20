@@ -5,21 +5,26 @@
 #include <iostream>
 #include "EnemyManager.h"
 
-
 void EnemyManager::update(float delta) {
     auto enemy = enemies.begin();
     while (enemy != enemies.end()) {
         (*enemy).update(delta);
         if ((*enemy).hasHitEnd()) {
+            killedEnemies++;
             gameStateManager.setHealth(gameStateManager.getHealth() - (*enemy).getDamage());
             enemy = enemies.erase(enemy);
         } else if ((*enemy).getHealth() <= 0) {
+            killedEnemies++;
             gameStateManager.setMoney(gameStateManager.getMoney() + (*enemy).getReward());
             enemy = enemies.erase(enemy);
         } else {
             ++enemy;
         }
     }
+    if (round1)
+        round();
+    else if (roundFinished)
+        roundOver();
 }
 
 EnemyManager::EnemyManager(const Map &map, GameStateManager &gameStateManager, ResourceManager &resourceManager)
@@ -41,8 +46,37 @@ EnemyManager::EnemyManager(const Map &map, GameStateManager &gameStateManager, R
     healthBarTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::HealthA));
 }
 
-const std::vector<Enemy> &EnemyManager::getEnemies() const {
+std::vector<Enemy> &EnemyManager::getEnemies() {
     return enemies;
+}
+
+void EnemyManager::round() {
+    int roundNum = gameStateManager.getRound();
+    int numEnemies = 4 * roundNum + 1;
+    int spawnedEnemies = getEnemies().size();
+    float enemyDelay = 3.0f / roundNum;
+    auto enemy = enemies.begin();
+    float lastCheck = clock.getElapsedTime().asSeconds();
+    if ((lastCheck >= enemyDelay) && (spawnedEnemies < numEnemies) && (!allSpawned)) {
+        makeEnemies();
+//        std::cout << "spawned: " << spawnedEnemies + 1 << std::endl; // testing
+        clock.restart();
+    }
+
+    if (spawnedEnemies == numEnemies)
+        allSpawned = true;
+
+    if (allSpawned && (killedEnemies == numEnemies)) {
+        round1 = false;
+        roundFinished = true;
+    }
+}
+
+void EnemyManager::roundOver() {
+    int roundNum = gameStateManager.getRound();
+    std::cout<<"Round "<<roundNum<<" over!"<<std::endl; // testing - should be a popup GUI window
+    roundFinished = false;
+    gameStateManager.setRound(roundNum + 1);
 }
 
 void EnemyManager::draw(sf::RenderTarget &target, sf::RenderStates states) {
@@ -55,8 +89,8 @@ void EnemyManager::draw(sf::RenderTarget &target, sf::RenderStates states) {
 
 void EnemyManager::makeEnemies() {
     addRandomEnemy();
-    for (auto &enemy: enemies)
-        enemy.hit(1);
+//    for (auto &enemy: enemies) // testing
+//        enemy.hit(2);
 }
 
 void EnemyManager::addRandomEnemy() {
@@ -67,6 +101,5 @@ void EnemyManager::addRandomEnemy() {
     int speed = 100;
     enemies.emplace_back(map.begin(), map.end(), enemyTextures[level - 1], healthBarTextures,
                          health, damage, reward, speed);
+
 }
-
-

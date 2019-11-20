@@ -65,5 +65,5 @@ bool GameStateManager::isPaused() {
 }
 
 GameStateManager::GameStateManager(const int maxHealth, const int maxRound) : health(maxHealth), maxHealth(maxHealth),
-                                                                              round(0), maxRound(maxRound), money(0),
+                                                                              round(1), maxRound(maxRound), money(0),
                                                                               gameState(GameState::PreGame), paused(false) {}

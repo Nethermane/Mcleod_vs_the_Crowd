@@ -163,3 +163,9 @@ void Enemy::drawHealthBar(sf::RenderTarget &target, sf::RenderStates states) con
 bool Enemy::isDamaged() const {
     return healthBar.getHealth() < healthBar.getMaxHealth();
 }
+
+
+
+sf::Vector2f Enemy::getPosition() {
+    return sprite.getPosition();
+}

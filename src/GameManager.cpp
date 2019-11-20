@@ -19,6 +19,7 @@ GameManager::GameManager(sf::RenderWindow &window) :
     gameStateManager.setMoney(10);
     window.setMouseCursorVisible(false);
     sf::Sprite mouse(*resourceManager.GetTexture(ResourceIdentifier::pointer));
+    towerManager.createTower(resourceManager.GetTexture(ResourceIdentifier::mcleod), sf::Vector2f(500,500), TowerType::Tower1);
     clock.restart();
     soundManager.play("../music/test.ogg");
     sf::CircleShape range;
@@ -38,11 +39,8 @@ GameManager::GameManager(sf::RenderWindow &window) :
                         case sf::Keyboard::Q :
                             window.close();
                             break;
-                        case sf::Keyboard::E:
-                            enemyManager.makeEnemies();
-                            break;
                         case sf::Keyboard::P:
-                            break;
+                            gameStateManager.togglePause();
                         default:
                             break;
                     }
@@ -83,7 +81,6 @@ GameManager::GameManager(sf::RenderWindow &window) :
                         //Click was somewhere on game field
                         if (transactionType == MenuButtonPresses::None && gameClickHitBox.contains(click)) {
                             //TODO: handle clicking in game. Select tower or place tower
-
                         }
                     }
                     break;
@@ -103,7 +100,9 @@ GameManager::GameManager(sf::RenderWindow &window) :
         window.clear(sf::Color::Black);
         map.draw(window, sf::RenderStates::Default);
         enemyManager.draw(window, sf::RenderStates::Default);
+        projectileManager.draw(window, sf::RenderStates::Default);
         ingameMenu.draw(window, sf::RenderStates::Default);
+        towerManager.draw(window, sf::RenderStates::Default);
         window.draw(mouse);
         window.draw(range);
         clock.restart();

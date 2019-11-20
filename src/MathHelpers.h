@@ -8,6 +8,6 @@
 #include "Common.h"
 
 float angleBetweenTwoPoints(sf::Vector2f origin, sf::Vector2f target);
-
+float distBetweenTwoPoints(sf::Vector2f first, sf::Vector2f second);
 
 #endif //FIGHTCLUB_MATHHELPERS_H

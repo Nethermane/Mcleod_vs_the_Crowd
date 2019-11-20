@@ -59,6 +59,9 @@ public:
 
     int getReward() const;
 
+
+    sf::Vector2f getPosition();
+
     ///Apply damage to an enemy
     ///@param damage amount of damage to apply to enemy
     void hit(int damage);

@@ -5,24 +5,37 @@
 #ifndef FIGHTCLUB_TOWERMANAGER_H
 #define FIGHTCLUB_TOWERMANAGER_H
 
+#include <string>
+
 #include "Map.h"
 #include "Tower.h"
 #include "Upgrade.h"
+#include "EnemyManager.h"
+#include "ProjectileManager.h"
+
+using std::string;
 #include <algorithm>
 
 /**
  * This class stores all towers and manages the creation of projectiles.
  */
-class TowerManager {
+class TowerManager: sf::Drawable {
 private:
     std::forward_list<Upgrade> tower1Upgrades, tower2Upgrades, tower3Upgrades, tower4Upgrades;
-    const Map &map;
     std::vector<Tower> towers;
+    const Map &map;
+    const EnemyManager &enemyManager;
+    ProjectileManager &projectileManager;
 public:
-    explicit TowerManager(const Map &map);
+    explicit TowerManager(const Map &map, const EnemyManager &enemyManager, ProjectileManager &projectileManager);
+
     void update(float delta);
     bool addTower(Tower t);
     bool upgradeTower(Tower t);
+    ///Renders the towers
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+
+    void createTower(const std::shared_ptr<sf::Texture> &texture, const sf::Vector2f &position, const TowerType &towerType);
 };
 
 
