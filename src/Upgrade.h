@@ -12,10 +12,11 @@ private:
     friend class Tower;
     friend class TowerManager;
 
-    const int range, attackSpeed, level, upgradeCost, cost;
+    const int range, level, upgradeCost, cost, damage;
+    const float attackSpeed;
 
-    explicit Upgrade(const int &range, const int &attackSpeed, const int &level,
-                     const int &upgradeCost, const int &cost);
+    explicit Upgrade(const int &range, const float &attackSpeed, const int &level,
+                     const int &upgradeCost, const int &cost, const int &damage);
 
 public:
     int getUpgradeCost() const;
