@@ -35,9 +35,9 @@ GameManager::GameManager(sf::RenderWindow &window) :
                         case sf::Keyboard::Q :
                             window.close();
                             break;
-                        case sf::Keyboard::E:
-                            enemyManager.makeEnemies();
-                            break;
+//                        case sf::Keyboard::E:
+//                            enemyManager.makeEnemies();
+//                            break;
                         default:
                             break;
                     }
