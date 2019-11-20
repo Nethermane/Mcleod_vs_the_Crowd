@@ -42,14 +42,10 @@ void Enemy::HealthBar::updateGraphic() {
     oldSection = currSection;
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-parameter"
-
 void Enemy::HealthBar::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    target.draw(sprite);
+    target.draw(sprite, states);
 }
 
-#pragma clang diagnostic pop
 
 void Enemy::HealthBar::hit(int damage) {
     health -= damage;
@@ -72,17 +68,20 @@ void Enemy::update(float delta) {
     if (hitEnd || getHealth() <= 0)
         return;
     timeOnCurrentPath += delta;
+    totalMoveTime += delta;
     if (timeOnCurrentPath > timeTillNextPath)
         startNewMovePath(false);
-    else
+    else {
         sprite.move(x_angle * speed * delta, y_angle * speed * delta);
+        hitBox.setPosition(sprite.getPosition());
+    }
     healthBar.update(sprite);
 }
 
 void Enemy::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     if (hitEnd || getHealth() <= 0)
         return;
-    target.draw(sprite);
+    target.draw(sprite, states);
 }
 
 
@@ -113,11 +112,14 @@ Enemy::Enemy(MapIterator trackStart,
              int health, int damage, int reward, float speed)
         : currentTarget(trackStart), trackEnd(trackEnd),
           timeOnCurrentPath(0), timeTillNextPath(0), healthBar(health, healthBarTextures), damage(damage),
-          reward(reward), speed(speed), texture(
+          reward(reward), speed(speed), totalMoveTime(0), texture(
                 std::move(texture)) {
     sprite.setScale(0.3, 0.3);
     sprite.setTexture(*this->texture);
     sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
+    hitBox = sf::CircleShape(sprite.getGlobalBounds().width/2*0.5f);
+    hitBox.setOrigin(hitBox.getRadius(), hitBox.getRadius());
+    hitBox.setPosition(sprite.getPosition());
     startNewMovePath(true);
 }
 
@@ -157,7 +159,7 @@ bool Enemy::hasHitEnd() const {
 }
 
 void Enemy::drawHealthBar(sf::RenderTarget &target, sf::RenderStates states) const {
-    target.draw(healthBar);
+    target.draw(healthBar, states);
 }
 
 bool Enemy::isDamaged() const {
@@ -168,4 +170,24 @@ bool Enemy::isDamaged() const {
 
 sf::Vector2f Enemy::getPosition() {
     return sprite.getPosition();
+}
+
+sf::FloatRect Enemy::getGlobalBounds() const{
+    return sprite.getGlobalBounds();
+}
+
+float Enemy::getTotalMoveTime() const {
+    return totalMoveTime;
+}
+
+float Enemy::getXangle() const {
+    return x_angle;
+}
+
+float Enemy::getYangle() const {
+    return y_angle;
+}
+
+sf::CircleShape Enemy::getHitBox() const {
+    return hitBox;
 }

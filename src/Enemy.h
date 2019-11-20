@@ -10,6 +10,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include "Common.h"
 #include <memory>
+#include <SFML/Graphics/CircleShape.hpp>
 
 ///Class to represent enemies
 ///Movement, rendering, and death are all handled inside this class
@@ -37,9 +38,11 @@ class Enemy : sf::Drawable {
 private:
     int damage, reward;
     float speed, timeOnCurrentPath, timeTillNextPath;
+    float totalMoveTime;
     std::shared_ptr<sf::Texture> texture;
     float x_angle, y_angle;
     HealthBar healthBar;
+    sf::CircleShape hitBox;
 public:
     int getHealth() const;
 
@@ -47,6 +50,8 @@ public:
     MapIterator currentTarget;
     MapIterator trackEnd;
     bool hitEnd = false;
+
+    sf::CircleShape getHitBox() const;
 
     ///Starts path or turns at turning point
     ///Updates the hit end variable
@@ -59,6 +64,7 @@ public:
 
     int getReward() const;
 
+    sf::FloatRect getGlobalBounds() const;
 
     sf::Vector2f getPosition();
 
@@ -74,6 +80,10 @@ public:
     ///Render health bar for enemy
     void drawHealthBar(sf::RenderTarget &target, sf::RenderStates states) const;
 
+    float getTotalMoveTime() const;
+
+    float getXangle() const;
+    float getYangle() const;
 
 public:
     ///Moves the enemy if it hasn't hit and is alive

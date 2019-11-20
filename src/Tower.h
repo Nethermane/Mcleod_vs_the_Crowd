@@ -38,7 +38,7 @@ public:
 
 
     ///Fires and aims if the tower cooldown has been surpassed
-    void update(float delta, const std::vector<Enemy> &enemies, const std::function<void(Enemy)>& f);
+    void update(float delta, const std::vector<Enemy> &enemies, const std::function<void(Tower, Enemy, float)>& f);
 
     ///Renders the tower in it's current direction
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
@@ -52,9 +52,12 @@ public:
     TowerType getTowerType() const;
 
 
+    int getDamage() const;
+    float getProjectileSpeed() const;
+
 private:
     int rotation, lastAttack, cost, level, damage;
-    float timeSinceLastAttack, attackDelay, range;
+    float timeSinceLastAttack, attackDelay, range, projectileSpeed;
 
 
 
