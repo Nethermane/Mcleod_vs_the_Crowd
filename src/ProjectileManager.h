@@ -18,8 +18,8 @@ public:
      * @param delta time since last frame
      */
     ProjectileManager();
-    void update(std::vector<Enemy> &enemies, float delta);
-    void addProjectile(int speed, int damage, float angle, sf::Vector2f position, sf::Texture &texture, sf::FloatRect& bounds);
+    void update(float delta, std::vector<Enemy> &enemies);
+    void addProjectile(float speed, int damage, float angle, sf::Vector2f position, const std::shared_ptr<sf::Texture> &texture, const sf::FloatRect& bounds);
     std::vector<Projectile> getProjectiles();
     void draw(sf::RenderTarget &target, sf::RenderStates states);
 };

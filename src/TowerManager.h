@@ -26,8 +26,10 @@ private:
     const Map &map;
     const EnemyManager &enemyManager;
     ProjectileManager &projectileManager;
+    const ResourceManager &resourceManager;
+    const sf::FloatRect globalBounds;
 public:
-    explicit TowerManager(const Map &map, const EnemyManager &enemyManager, ProjectileManager &projectileManager);
+    explicit TowerManager(const Map &map, const EnemyManager &enemyManager, ProjectileManager &projectileManager, const ResourceManager &resourceManager, const sf::FloatRect &globalBounds);
 
     void update(float delta);
     bool addTower(Tower t);

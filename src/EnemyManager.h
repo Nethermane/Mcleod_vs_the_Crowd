@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <random>
 #include "Map.h"
 #include "GameStateManager.h"
 #include "ResourceManager.h"
@@ -15,6 +16,8 @@
 ///Class for managing all enemies, should only have a single instance
 class EnemyManager {
 private:
+    std::minstd_rand simple_rand;
+
     std::vector<Enemy> enemies;
     GameStateManager &gameStateManager;
     ResourceManager &resourceManager;
