@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <chrono>
 #include "EnemyManager.h"
 
 void EnemyManager::update(float delta) {
@@ -33,6 +34,7 @@ EnemyManager::EnemyManager(const Map &map, GameStateManager &gameStateManager, R
                   gameStateManager),
           resourceManager(
                   resourceManager) {
+    simple_rand.seed(static_cast<unsigned int>(std::chrono::steady_clock::now().time_since_epoch().count()));
     enemyTextures.clear();
     enemyTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::enemy_1));
     enemyTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::enemy_2));
@@ -46,7 +48,7 @@ EnemyManager::EnemyManager(const Map &map, GameStateManager &gameStateManager, R
     healthBarTextures.push_back(resourceManager.GetTexture(ResourceIdentifier::HealthA));
 }
 
-std::vector<Enemy> &EnemyManager::getEnemies() {
+const std::vector<Enemy> &EnemyManager::getEnemies() const {
     return enemies;
 }
 
@@ -94,7 +96,7 @@ void EnemyManager::makeEnemies() {
 }
 
 void EnemyManager::addRandomEnemy() {
-    int level = static_cast<int>(rand() % enemyTextures.size() + 1);
+    auto level = static_cast<int>(simple_rand() % enemyTextures.size() + 1);
     int health = level * 5;
     int damage = level;
     int reward = level;

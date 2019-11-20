@@ -11,7 +11,7 @@
 
 class Projectile: sf::Drawable {
 private:
-    int speed;
+    float speed;
     int damage;
     bool deletable;
     sf::FloatRect bounds;
@@ -24,16 +24,16 @@ private:
 
 
 public:
-    explicit Projectile(int speed, int damage, float angle,
-            sf::Vector2f position, sf::Texture &texture, sf::FloatRect& bounds);
+    explicit Projectile(float speed, int damage, float angle,
+            sf::Vector2f position, const std::shared_ptr<sf::Texture> &texture, const sf::FloatRect& bounds);
     /**
      * Updates the position of a projectile
      * @param delta time since last frame
      */
-    void update(std::vector<Enemy> &enemies, float delta);
+    void update(float delta, std::vector<Enemy> &enemies);
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     bool isDeletable();
-    int getSpeed();
+    float getSpeed();
     int getDamage();
     sf::Vector2f getPosition();
     //void draw

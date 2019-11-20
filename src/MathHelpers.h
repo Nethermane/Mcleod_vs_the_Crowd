@@ -6,8 +6,9 @@
 #define FIGHTCLUB_MATHHELPERS_H
 
 #include "Common.h"
+#include <SFML/Graphics/CircleShape.hpp>
 
 float angleBetweenTwoPoints(sf::Vector2f origin, sf::Vector2f target);
 float distBetweenTwoPoints(sf::Vector2f first, sf::Vector2f second);
-
+bool intersectsCircle(const sf::CircleShape &circle, const sf::FloatRect &rect);
 #endif //FIGHTCLUB_MATHHELPERS_H
