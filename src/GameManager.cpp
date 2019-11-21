@@ -84,20 +84,20 @@ GameManager::GameManager(sf::RenderWindow &window) :
             towerManager.update(delta);
             clock_t stop = std::clock();
             time = (double) (stop - start);
-            if (time > 0)
-                std::cout << time / CLOCKS_PER_SEC << "Time for towers" << std::endl;
+//            if (time > 0)
+//                std::cout << time / CLOCKS_PER_SEC << "Time for towers" << std::endl;
             start = std::clock();
             enemyManager.update(delta);
             stop = std::clock();
             time = (double) (stop - start);
-            if (time > 0)
-                std::cout << time / CLOCKS_PER_SEC << "Time for enemies" << std::endl;
+//            if (time > 0)
+//                std::cout << time / CLOCKS_PER_SEC << "Time for enemies" << std::endl;
             start = std::clock();
             projectileManager.update(delta, const_cast<std::vector<Enemy> &>(enemyManager.getEnemies()));
             stop = std::clock();
             time = (double) (stop - start);
-            if (time > 0)
-                std::cout << time / CLOCKS_PER_SEC << "Time for projectiles" << std::endl;
+//            if (time > 0)
+//                std::cout << time / CLOCKS_PER_SEC << "Time for projectiles" << std::endl;
         }
         ingameMenu.update(delta);
         window.clear(sf::Color::Black);
