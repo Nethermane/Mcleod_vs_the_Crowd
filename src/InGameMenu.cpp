@@ -108,7 +108,7 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     round.setFillColor(sf::Color::Black);
     round.setString("Round: " + std::to_string(gameStateManager.getRound()));
     round.setOrigin(round.getLocalBounds().width / 2, round.getLocalBounds().height / 2);
-    round.setPosition(center_horizontal, outlineRound.getPosition().y+round.getLocalBounds().height*2+padding);
+    round.setPosition(center_horizontal, outlineRound.getPosition().y+round.getLocalBounds().height*4+padding);
 
 
     outlineRound.setSize(sf::Vector2f(screenSize.x * 0.25f, round.getLocalBounds().height + padding));

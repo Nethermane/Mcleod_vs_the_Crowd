@@ -12,12 +12,12 @@ void EnemyManager::update(float delta) {
         (*enemy).update(delta);
         if ((*enemy).hasHitEnd()) {
             killedEnemies++;
-            std::cout<<"Enemy hit end! "<<killedEnemies<<std::endl;
+//            std::cout<<"Enemy hit end! "<<killedEnemies<<std::endl; // testing
             gameStateManager.setHealth(gameStateManager.getHealth() - (*enemy).getDamage());
             enemy = enemies.erase(enemy);
         } else if ((*enemy).getHealth() <= 0) {
             killedEnemies++;
-            std::cout<<"Enemy killed! "<<killedEnemies<<std::endl;
+//            std::cout<<"Enemy killed! "<<killedEnemies<<std::endl; // testing
             gameStateManager.setMoney(gameStateManager.getMoney() + (*enemy).getReward());
             enemy = enemies.erase(enemy);
         } else {
@@ -62,14 +62,14 @@ void EnemyManager::round() {
     float lastCheck = clock.getElapsedTime().asSeconds();
     if ((lastCheck >= enemyDelay) && (spawnedEnemies < numEnemies) && (!allSpawned)) {
         makeEnemies();
-        std::cout << "Enemy spawned! " << spawnedEnemies + 1 << std::endl; // testing
-        std::cout << "Killed enemies: " << killedEnemies << std::endl; // testing
+//        std::cout << "Enemy spawned! " << spawnedEnemies + 1 << std::endl; // testing
+//        std::cout << "Killed enemies: " << killedEnemies << std::endl; // testing
         clock.restart();
     }
 
     if (spawnedEnemies == numEnemies) {
         allSpawned = true;
-        std::cout << "All spawned!" << std::endl;
+//        std::cout << "All spawned!" << std::endl; // testing
     }
 
     if (killedEnemies == numEnemies)
