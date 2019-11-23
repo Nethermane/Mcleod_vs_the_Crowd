@@ -7,6 +7,7 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "Enemy.h"
+#include <SFML/Graphics/RectangleShape.hpp>
 #include "SelbaWard/Spline.hpp"
 
 ///The Map object represents the path which enemies take
@@ -14,9 +15,9 @@ class Map : sf::Drawable{
 private:
     std::forward_list<sf::Vector2f> turningPoints;
     sw::Spline spline;
+    std::vector<sf::RectangleShape> trackHitboxes;
 public:
-    bool isTowerPositionValid(float x, float y) const;
-    bool isTowerPositionValid(sf::Vector2f position) const;
+    std::vector<sf::RectangleShape> getTrackHitBoxes() const;
     MapIterator begin() const;
     MapIterator end() const;
 public:

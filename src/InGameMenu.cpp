@@ -3,48 +3,48 @@
 //
 
 #include "InGameMenu.h"
-#include "GameStateManager.h"
-#include <SFML/Graphics/RenderTarget.hpp>
-#include <SFML/Graphics/Text.hpp>
-#include <iostream>
-#include <SFML/Graphics/Rect.hpp>
 
 
 void InGameMenu::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-    target.draw(background);
-    target.draw(outlineMoney);
-    target.draw(outlineRound);
-    target.draw(outlineUpgrade);
-    target.draw(outlineTower1);
-    target.draw(outlineTower2);
-    target.draw(outlineTower3);
-    target.draw(outlineTower4);
-    target.draw(healthBar);
-    target.draw(outlineHealth);
-    target.draw(money);
-    target.draw(round);
-    target.draw(cost1);
-    target.draw(cost2);
-    target.draw(cost3);
-    target.draw(cost4);
-    target.draw(upgrade);
-    target.draw(healthText);
-    target.draw(tower1);
-    target.draw(tower2);
-    target.draw(tower3);
-    target.draw(tower4);
+    target.draw(background, states);
+    target.draw(outlineMoney, states);
+    target.draw(outlineUpgrade, states);
+    target.draw(outlineTower1, states);
+    target.draw(outlineTower2, states);
+    target.draw(outlineTower3, states);
+    target.draw(outlineTower4, states);
+    target.draw(healthBar, states);
+    target.draw(outlineHealth, states);
+    target.draw(money, states);
+    target.draw(round, states);
+    target.draw(cost1, states);
+    target.draw(cost2, states);
+    target.draw(cost3, states);
+    target.draw(cost4, states);
+    target.draw(upgrade, states);
+    target.draw(healthText, states);
+    target.draw(tower1, states);
+    target.draw(tower2, states);
+    target.draw(tower3, states);
+    target.draw(tower4, states);
 
-    target.draw(sound);
-    target.draw(options);
-    target.draw(pause);
-    target.draw(fps_counter);
+    target.draw(sound, states);
+    target.draw(options, states);
+    target.draw(pause, states);
+    target.draw(fps_counter, states);
+    target.draw(mouse, states);
+    if(selectedTowerType != TowerType::None)
+        target.draw(range, states);
 }
 
 
 InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, ResourceManager &resourceManager,
-                       GameStateManager &gameStateManager)
-        : resourceManager(resourceManager), gameStateManager(gameStateManager) {
+                       GameStateManager &gameStateManager, TowerManager &towerManager)
+        : resourceManager(resourceManager), gameStateManager(gameStateManager),
+          mouse(*resourceManager.GetTexture(ResourceIdentifier::pointer)), towerManager(towerManager) {
+    mouse.setOrigin(mouse.getGlobalBounds().width/2, mouse.getGlobalBounds().height/2);
     selectedTower = nullptr;
+    range.setFillColor(sf::Color(255, 255, 255, 128));
     padding = screenSize.x * 0.02f;
     top = padding;
     bottom = screenSize.y - padding;
@@ -53,8 +53,8 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     center_horizontal = screenSize.x * 0.85f;
     column1 = 0.775f * screenSize.x;
     column2 = 0.925f * screenSize.x;
-    row1 = screenSize.y * 0.35f;
-    row2 = screenSize.y * 0.65f;
+    row1 = screenSize.y * 0.4f;
+    row2 = screenSize.y * 0.7f;
     thirdWidth = (windowEnd - windowStart) / 3.0f;
 
     background.setFillColor(sf::Color::White);
@@ -108,19 +108,19 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     round.setFillColor(sf::Color::Black);
     round.setString("Round: " + std::to_string(gameStateManager.getRound()));
     round.setOrigin(round.getLocalBounds().width / 2, round.getLocalBounds().height / 2);
-    round.setPosition(center_horizontal, outlineRound.getPosition().y+round.getLocalBounds().height*4+padding);
+    round.setPosition(center_horizontal, outlineMoney.getPosition().y + outlineMoney.getLocalBounds().height / 2+ round.getLocalBounds().height/2);
 
 
-    outlineRound.setSize(sf::Vector2f(screenSize.x * 0.25f, round.getLocalBounds().height + padding));
-    outlineRound.setOrigin(outlineRound.getLocalBounds().width / 2, outlineRound.getLocalBounds().height / 2);
-    outlineRound.setOutlineColor(sf::Color::Black);
-    outlineRound.setFillColor(sf::Color::Transparent);
-    outlineRound.setOutlineThickness(2);
-    outlineRound.setPosition(round.getPosition().x, round.getPosition().y + round.getLocalBounds().height / 2);
+//    outlineRound.setSize(sf::Vector2f(screenSize.x * 0.25f, round.getLocalBounds().height + padding));
+//    outlineRound.setOrigin(outlineRound.getLocalBounds().width / 2, outlineRound.getLocalBounds().height / 2);
+//    outlineRound.setOutlineColor(sf::Color::Black);
+//    outlineRound.setFillColor(sf::Color::Transparent);
+//    outlineRound.setOutlineThickness(2);
+//    outlineRound.setPosition(round.getPosition().x, round.getPosition().y+ round.getLocalBounds().height/2+10);
 
     cost1.setFont(*resourceManager.GetFont(ResourceIdentifier::apex));
     cost1.setCharacterSize(25);
-    cost1.setString("10");
+    cost1.setString(std::to_string(static_cast<int>(TowerType::Tower1)));
     cost1.setFillColor(sf::Color::Black);
     cost1.setOrigin(cost1.getLocalBounds().width / 2, cost1.getLocalBounds().height / 2);
     cost1.setPosition(column1, row1);
@@ -143,7 +143,7 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
 
     cost2.setFont(*resourceManager.GetFont(ResourceIdentifier::apex));
     cost2.setCharacterSize(25);
-    cost2.setString("25");
+    cost2.setString(std::to_string(static_cast<int>(TowerType::Tower2)));
     cost2.setFillColor(sf::Color::Black);
     cost2.setOrigin(cost2.getLocalBounds().width / 2, cost2.getLocalBounds().height / 2);
     cost2.setPosition(column2, row1);
@@ -165,7 +165,7 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
 
     cost3.setFont(*resourceManager.GetFont(ResourceIdentifier::apex));
     cost3.setCharacterSize(25);
-    cost3.setString("75");
+    cost3.setString(std::to_string(static_cast<int>(TowerType::Tower3)));
     cost3.setFillColor(sf::Color::Black);
     cost3.setOrigin(cost3.getLocalBounds().width / 2, cost3.getLocalBounds().height / 2);
     cost3.setPosition(column1, row2);
@@ -188,7 +188,7 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
 
     cost4.setFont(*resourceManager.GetFont(ResourceIdentifier::apex));
     cost4.setCharacterSize(25);
-    cost4.setString("100");
+    cost4.setString(std::to_string(static_cast<int>(TowerType::Tower4)));
     cost4.setFillColor(sf::Color::Black);
     cost4.setOrigin(cost4.getLocalBounds().width / 2, cost4.getLocalBounds().height / 2);
     cost4.setPosition(column2, row2);
@@ -246,8 +246,17 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     outlineHealth.setPosition(healthBar.getPosition().x - 1, healthBar.getPosition().y - 1);
 }
 
-void InGameMenu::update(const float &delta) {
+void InGameMenu::update(const float &delta, const sf::Vector2f &mousePos) {
+    mouse.setPosition(mousePos);
+    range.setPosition(mousePos);
     fps_counter.setString(std::to_string(static_cast<int>(1.0f / delta)));
+    if(selectedTowerType != TowerType::None) {
+        if(towerManager.isTowerPositionValid(mousePos) && menuPosition(mousePos) == MenuButtonPresses::None) {
+            range.setFillColor(sf::Color(255, 255, 255, 128));
+        } else {
+            range.setFillColor(sf::Color(255, 0, 0, 128));
+        }
+    }
     updateHealth();
     updateMoney();
     updateUpgrade();
@@ -264,7 +273,8 @@ void InGameMenu::deselectTower() {
 }
 
 void InGameMenu::updateUpgrade() {
-    if(selectedTower != nullptr &&(*selectedTower).canUpgrade() && gameStateManager.getMoney() >= (*selectedTower).getUpgradeCost())
+    if (selectedTower != nullptr && (*selectedTower).canUpgrade() &&
+        gameStateManager.getMoney() >= (*selectedTower).getUpgradeCost())
         outlineUpgrade.setFillColor(sf::Color(169, 169, 169, 255));
     else
         outlineUpgrade.setFillColor(sf::Color(169, 169, 169, 100));
@@ -290,36 +300,28 @@ void InGameMenu::updateMoney() {
     money.setOrigin(money.getLocalBounds().width / 2, money.getLocalBounds().height / 2);
 }
 
-MenuButtonPresses InGameMenu::menuClick(sf::Vector2i clickPosition) {
-    sf::Vector2f clickPositionFloat = sf::Vector2f(clickPosition);
-    if (outlineTower1.getGlobalBounds().contains(clickPositionFloat))
+MenuButtonPresses InGameMenu::menuPosition(sf::Vector2f clickPosition) {
+    if (outlineTower1.getGlobalBounds().contains(clickPosition))
         return MenuButtonPresses::Tower1;
-    else if (outlineTower2.getGlobalBounds().contains(clickPositionFloat))
+    else if (outlineTower2.getGlobalBounds().contains(clickPosition))
         return MenuButtonPresses::Tower2;
-    else if (outlineTower3.getGlobalBounds().contains(clickPositionFloat))
+    else if (outlineTower3.getGlobalBounds().contains(clickPosition))
         return MenuButtonPresses::Tower3;
-    else if (outlineTower4.getGlobalBounds().contains(clickPositionFloat))
+    else if (outlineTower4.getGlobalBounds().contains(clickPosition))
         return MenuButtonPresses::Tower4;
-    else if (outlineUpgrade.getGlobalBounds().contains(clickPositionFloat))
-        if (selectedTower != nullptr)
-            return MenuButtonPresses::Upgrade;
-        else
-            return MenuButtonPresses::None;
-    else if (pause.getGlobalBounds().contains(clickPositionFloat))
+    else if (outlineUpgrade.getGlobalBounds().contains(clickPosition))
+        return MenuButtonPresses::Upgrade;
+    else if (pause.getGlobalBounds().contains(clickPosition))
         return MenuButtonPresses::Pause;
-    else if (options.getGlobalBounds().contains(clickPositionFloat))
+    else if (options.getGlobalBounds().contains(clickPosition))
         return MenuButtonPresses::Options;
-    else if (sound.getGlobalBounds().contains(clickPositionFloat))
+    else if (sound.getGlobalBounds().contains(clickPosition))
         if (muteState) {
-            sound.setTexture(*resourceManager.GetTexture(ResourceIdentifier::sound));
-            muteState = !muteState;
             return MenuButtonPresses::UnMute;
         } else {
-            sound.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mute));
-            muteState = !muteState;
             return MenuButtonPresses::Mute;
         }
-    else if (background.getGlobalBounds().contains(clickPositionFloat)) {
+    else if (background.getGlobalBounds().contains(clickPosition)) {
         return MenuButtonPresses::MenuBackground;
     } else
         return MenuButtonPresses::None;
@@ -329,4 +331,50 @@ MenuButtonPresses InGameMenu::menuClick(sf::Vector2i clickPosition) {
 
 Tower *InGameMenu::getSelectedTower() const {
     return selectedTower;
+}
+
+void InGameMenu::setSelectedTowerType(TowerType type) {
+    selectedTowerType = type;
+    if (selectedTowerType != TowerType::None) {
+        switch (selectedTowerType) {
+            case TowerType::Tower1:
+                mouse.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod), true);
+                range.setRadius(towerManager.getFirstRange(TowerType::Tower1));
+                break;
+            case TowerType::Tower2:
+                mouse.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod), true);
+                range.setRadius(towerManager.getFirstRange(TowerType::Tower2));
+                break;
+            case TowerType::Tower3:
+                mouse.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod), true);
+                range.setRadius(towerManager.getFirstRange(TowerType::Tower3));
+                break;
+            case TowerType::Tower4:
+                mouse.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod), true);
+                range.setRadius(towerManager.getFirstRange(TowerType::Tower4));
+                break;
+            default:
+                break;
+        }
+        mouse.setOrigin(mouse.getLocalBounds().width / 2, mouse.getLocalBounds().height / 2);
+        mouse.setScale(constants::towerSizeMod, constants::towerSizeMod);
+        range.setOrigin(range.getLocalBounds().width / 2, range.getLocalBounds().height / 2);
+    } else {
+        mouse.setTexture( *resourceManager.GetTexture(ResourceIdentifier::pointer), true);
+        mouse.setOrigin(mouse.getLocalBounds().width / 2, mouse.getLocalBounds().height / 2);
+    }
+}
+
+TowerType InGameMenu::getSelectedTowerType() const {
+    return selectedTowerType;
+}
+
+void InGameMenu::setUnMute() {
+    sound.setTexture(*resourceManager.GetTexture(ResourceIdentifier::sound));
+    muteState = !muteState;
+}
+
+void InGameMenu::setMute() {
+    sound.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mute));
+    muteState = !muteState;
 }

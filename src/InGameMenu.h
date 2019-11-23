@@ -14,6 +14,7 @@
 #include "GameStateManager.h"
 #include "Tower.h"
 #include "SelbaWard/ProgressBar.hpp"
+#include "TowerManager.h"
 
 enum class MenuButtonPresses {
     None, Tower1, Tower2, Tower3, Tower4, Upgrade, Pause, Options, Mute, UnMute, MenuBackground
@@ -24,11 +25,14 @@ class InGameMenu : sf::Drawable {
 private:
     ResourceManager &resourceManager;
     GameStateManager &gameStateManager;
-    sf::RectangleShape background, outlineMoney, outlineRound, outlineUpgrade, outlineHealth, outlineTower1, outlineTower2, outlineTower3, outlineTower4;
+    TowerManager &towerManager;
+    sf::RectangleShape background, outlineMoney, outlineUpgrade, outlineHealth, outlineTower1, outlineTower2, outlineTower3, outlineTower4;
     sf::Text fps_counter, money, round, cost1, cost2, cost3, cost4, upgrade, healthText;
-    sf::Sprite tower1, tower2, tower3, tower4, pause, sound, options;
+    sf::Sprite tower1, tower2, tower3, tower4, pause, sound, options, mouse;
+    sf::CircleShape range;
     sw::ProgressBar healthBar;
     Tower *selectedTower;
+    TowerType selectedTowerType{TowerType::None};
     float padding,
             top,
             bottom,
@@ -50,16 +54,16 @@ private:
     void updateUpgrade();
 public:
     InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, ResourceManager &resourceManager,
-               GameStateManager &gameStateManager);
+               GameStateManager &gameStateManager, TowerManager &towerManager);
 
     ///Renders all in game menu items
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
     ///Updates ui components based on game sate
-    void update(const float &delta);
+    void update(const float &delta, const sf::Vector2f &mousePos);
 
     ///Return what was clicked if clicking it is allowed
-    MenuButtonPresses menuClick(sf::Vector2i clickPosition);
+    MenuButtonPresses menuPosition(sf::Vector2f clickPosition);
 
     ///Selects a tower, updates the ui component
     ///@param tower the tower that is being selected
@@ -69,6 +73,14 @@ public:
     void deselectTower();
 
     Tower *getSelectedTower() const;
+
+    void setSelectedTowerType(TowerType type);
+
+    TowerType getSelectedTowerType() const;
+
+    void setUnMute();
+
+    void setMute();
 };
 
 

@@ -1,15 +1,15 @@
 #include <utility>
 #include <SFML/Graphics/RenderTarget.hpp>
-#include <cmath>
-#include <iostream>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <cmath>
 
 //
 // Created by Bruce on 2019-10-12.
 //
 
 #include "Projectile.h"
-#include "MathHelpers.h"
+#include "RectangularBoundaryCollision.h"
+#include "Enemy.h"
 
 
 Projectile::Projectile(float spd, int dmg, float ang, sf::Vector2f pos,
@@ -47,7 +47,7 @@ sf::Vector2f Projectile::getPosition() {
 void Projectile::update(float delta, std::vector<Enemy> &enemies) {
     if (!deletable) {
         for (auto &enemy : enemies) {
-            if (intersectsCircle(enemy.getHitBox(),sprite.getGlobalBounds())) {
+            if (collision::areColliding(enemy.getHitBox(),sprite)) {
                 enemy.hit(damage);
                 deletable = true;
                 return;

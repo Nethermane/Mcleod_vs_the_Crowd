@@ -55,7 +55,7 @@ public:
     ///Constructor for new game state manager
     ///@param maxHealth the maximum health of the player
     ///@param maxRound the maximum round for this game instance
-    GameStateManager(int maxHealth, int maxRound);
+    GameStateManager(int maxHealth, int maxRound, int startingMoney);
 
 };
 
