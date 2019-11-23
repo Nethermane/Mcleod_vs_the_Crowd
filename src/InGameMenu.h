@@ -26,7 +26,7 @@ private:
     ResourceManager &resourceManager;
     GameStateManager &gameStateManager;
     TowerManager &towerManager;
-    sf::RectangleShape background, outlineMoney, outlineRound, outlineUpgrade, outlineHealth, outlineTower1, outlineTower2, outlineTower3, outlineTower4;
+    sf::RectangleShape background, outlineMoney, outlineUpgrade, outlineHealth, outlineTower1, outlineTower2, outlineTower3, outlineTower4;
     sf::Text fps_counter, money, round, cost1, cost2, cost3, cost4, upgrade, healthText;
     sf::Sprite tower1, tower2, tower3, tower4, pause, sound, options, mouse;
     sf::CircleShape range;

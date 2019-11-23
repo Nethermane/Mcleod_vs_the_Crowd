@@ -8,7 +8,6 @@
 void InGameMenu::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(background, states);
     target.draw(outlineMoney, states);
-    target.draw(outlineRound, states);
     target.draw(outlineUpgrade, states);
     target.draw(outlineTower1, states);
     target.draw(outlineTower2, states);
@@ -54,8 +53,8 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     center_horizontal = screenSize.x * 0.85f;
     column1 = 0.775f * screenSize.x;
     column2 = 0.925f * screenSize.x;
-    row1 = screenSize.y * 0.35f;
-    row2 = screenSize.y * 0.65f;
+    row1 = screenSize.y * 0.4f;
+    row2 = screenSize.y * 0.7f;
     thirdWidth = (windowEnd - windowStart) / 3.0f;
 
     background.setFillColor(sf::Color::White);
@@ -109,15 +108,15 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     round.setFillColor(sf::Color::Black);
     round.setString("Round: " + std::to_string(gameStateManager.getRound()));
     round.setOrigin(round.getLocalBounds().width / 2, round.getLocalBounds().height / 2);
-    round.setPosition(center_horizontal, outlineRound.getPosition().y + round.getLocalBounds().height * 2 + padding);
+    round.setPosition(center_horizontal, outlineMoney.getPosition().y + outlineMoney.getLocalBounds().height / 2+ round.getLocalBounds().height/2);
 
 
-    outlineRound.setSize(sf::Vector2f(screenSize.x * 0.25f, round.getLocalBounds().height + padding));
-    outlineRound.setOrigin(outlineRound.getLocalBounds().width / 2, outlineRound.getLocalBounds().height / 2);
-    outlineRound.setOutlineColor(sf::Color::Black);
-    outlineRound.setFillColor(sf::Color::Transparent);
-    outlineRound.setOutlineThickness(2);
-    outlineRound.setPosition(round.getPosition().x, round.getPosition().y + round.getLocalBounds().height / 2);
+//    outlineRound.setSize(sf::Vector2f(screenSize.x * 0.25f, round.getLocalBounds().height + padding));
+//    outlineRound.setOrigin(outlineRound.getLocalBounds().width / 2, outlineRound.getLocalBounds().height / 2);
+//    outlineRound.setOutlineColor(sf::Color::Black);
+//    outlineRound.setFillColor(sf::Color::Transparent);
+//    outlineRound.setOutlineThickness(2);
+//    outlineRound.setPosition(round.getPosition().x, round.getPosition().y+ round.getLocalBounds().height/2+10);
 
     cost1.setFont(*resourceManager.GetFont(ResourceIdentifier::apex));
     cost1.setCharacterSize(25);
