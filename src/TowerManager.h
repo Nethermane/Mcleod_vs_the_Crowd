@@ -10,12 +10,12 @@
 #include "Map.h"
 #include "Tower.h"
 #include "Upgrade.h"
-#include "EnemyManager.h"
-#include "ProjectileManager.h"
-
-using std::string;
 #include <algorithm>
 
+
+class ProjectileManager;
+class EnemyManager;
+class ResourceManager;
 /**
  * This class stores all towers and manages the creation of projectiles.
  */
@@ -28,16 +28,21 @@ private:
     ProjectileManager &projectileManager;
     const ResourceManager &resourceManager;
     const sf::FloatRect globalBounds;
+    sf::CircleShape towerSizeCircle;
 public:
     explicit TowerManager(const Map &map, const EnemyManager &enemyManager, ProjectileManager &projectileManager, const ResourceManager &resourceManager, const sf::FloatRect &globalBounds);
 
     void update(float delta);
-    bool addTower(Tower t);
     bool upgradeTower(Tower t);
     ///Renders the towers
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
-    void createTower(const std::shared_ptr<sf::Texture> &texture, const sf::Vector2f &position, const TowerType &towerType);
+    void createTower(const sf::Vector2f &position, const TowerType &towerType);
+
+    int getFirstRange(TowerType towerType) const;
+
+    bool isTowerPositionValid(float x, float y);
+    bool isTowerPositionValid(sf::Vector2f position);
 };
 
 

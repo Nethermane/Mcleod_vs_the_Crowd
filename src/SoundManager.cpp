@@ -6,7 +6,6 @@
 
 #include <SFML/Audio.hpp>
 #include "SoundManager.h"
-#include <string>
 
 SoundManager::SoundManager() {
     this->music.setLoop(true);

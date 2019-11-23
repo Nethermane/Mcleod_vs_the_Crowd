@@ -12,9 +12,9 @@
 
 class PurchaseManager{
 public:
-    PurchaseManager(const Map &map, GameStateManager &gameStateManager);
-    int purchase(Tower t, float x, float y);
-    int upgrade(Tower t, bool upgrade);
+    PurchaseManager(const Map &map, GameStateManager &gameStateManager, TowerManager &towerManager);
+    void purchase(const TowerType &t, const sf::Vector2f &position);
+    void upgrade(Tower &t);
 private:
     bool isTowerPositionValid(float x, float y);
     bool isTowerCostValid(float cost);

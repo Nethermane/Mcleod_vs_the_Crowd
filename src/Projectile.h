@@ -5,9 +5,12 @@
 #ifndef FIGHTCLUB_PROJECTILE_H
 #define FIGHTCLUB_PROJECTILE_H
 
-
+#include <SFML/Graphics/Sprite.hpp>
+#include <memory>
 #include <vector>
-#include "Enemy.h"
+
+class Enemy;
+
 
 class Projectile: sf::Drawable {
 private:

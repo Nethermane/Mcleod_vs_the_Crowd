@@ -4,9 +4,9 @@
 // Created by Bruce on 2019-10-12.
 //
 
-#include <cmath>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <iostream>
+#include <cmath>
 #include "Enemy.h"
 #include "MathHelpers.h"
 
@@ -117,7 +117,7 @@ Enemy::Enemy(MapIterator trackStart,
     sprite.setScale(0.3, 0.3);
     sprite.setTexture(*this->texture);
     sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
-    hitBox = sf::CircleShape(sprite.getGlobalBounds().width/2*0.5f);
+    hitBox = sf::CircleShape(sprite.getGlobalBounds().width/2*0.75f);
     hitBox.setOrigin(hitBox.getRadius(), hitBox.getRadius());
     hitBox.setPosition(sprite.getPosition());
     startNewMovePath(true);
@@ -159,6 +159,8 @@ bool Enemy::hasHitEnd() const {
 }
 
 void Enemy::drawHealthBar(sf::RenderTarget &target, sf::RenderStates states) const {
+    if (hitEnd || getHealth() <= 0)
+        return;
     target.draw(healthBar, states);
 }
 

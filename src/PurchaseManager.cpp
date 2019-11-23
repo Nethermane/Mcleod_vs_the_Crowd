@@ -4,37 +4,25 @@
 
 #include "PurchaseManager.h"
 
-PurchaseManager::PurchaseManager(const Map &map, GameStateManager &gameStateManager):
+PurchaseManager::PurchaseManager(const Map &map, GameStateManager &gameStateManager, TowerManager &towerManager):
 map(map), gameStateManager(gameStateManager), towerManager(towerManager){
 
 }
 
-int PurchaseManager::purchase(Tower t, float x, float y) {
-    if(isTowerCostValid(t.getCost())){
-        if(isTowerPositionValid(x, y)){
-            gameStateManager.setMoney(gameStateManager.getMoney() - t.getCost());
-            towerManager.addTower(t);
-            return 1;
-        }
+void PurchaseManager::purchase(const TowerType& t, const sf::Vector2f &position) {
+    if(isTowerCostValid(static_cast<int>(t)) && towerManager.isTowerPositionValid(position)){
+            gameStateManager.setMoney(gameStateManager.getMoney() - static_cast<int>(t));
+            towerManager.createTower(position, t);
     }
-    return 0;
 }
 
-int PurchaseManager::upgrade(Tower t, bool upgrade) {
-    if(upgrade){
+void PurchaseManager::upgrade(Tower &t) {
         if(isTowerCostValid(float (t.getUpgradeCost()))){
             t.upgrade();
             gameStateManager.setMoney(gameStateManager.getMoney() - t.getUpgradeCost());
-            return 1;
         }
-    }
-    return 0;
 }
 
-bool PurchaseManager::isTowerPositionValid(float x, float y) {
-    //check if valid position on map
-    return this->map.isTowerPositionValid(x, y);
-}
 
 bool PurchaseManager::isTowerCostValid(float cost) {
     //check if valid cost
