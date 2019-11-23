@@ -34,9 +34,10 @@ private:
     ///Ends round.
     void roundOver();
 
-    bool round1 = true;
-    bool roundFinished = false;
+    bool roundInProgress = true;
     bool allSpawned = false;
+    bool allKilled = false;
+    int spawnedEnemies = 0;
     int killedEnemies = 0;
 public:
     ///@returns list of all currently alive enemies
