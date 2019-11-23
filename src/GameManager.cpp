@@ -22,7 +22,9 @@ GameManager::GameManager(sf::RenderWindow &window) :
     window.setMouseCursorVisible(false);
     clock.restart();
     soundManager.play("../music/test.ogg");
-
+    sf::Sprite background{*resourceManager.GetTexture(ResourceIdentifier::track)};
+    background.setScale(window.getSize().x * 0.7f / background.getLocalBounds().width,
+                        window.getSize().y / background.getLocalBounds().height);
     soundManager.mute();
     while (window.isOpen()) {
         float delta = clock.getElapsedTime().asSeconds();
@@ -67,26 +69,32 @@ GameManager::GameManager(sf::RenderWindow &window) :
                                 auto upgradeCost = (towerToUpgrade).getUpgradeCost();
                                 if (towerToUpgrade.canUpgrade() && gameStateManager.getMoney() >= upgradeCost) {
                                     (*ingameMenu.getSelectedTower()).upgrade();
+                                    ingameMenu.selectTower(*(ingameMenu.getSelectedTower())); //update range
                                     gameStateManager.setMoney(gameStateManager.getMoney() - upgradeCost);
                                 }
                             }
                         } else {
                             //TODO: Handle tower buying
                             if (transactionType == MenuButtonPresses::Tower1) {
-                                ingameMenu.setSelectedTowerType(TowerType::Tower1);
+                                if (static_cast<int>(TowerType::Tower1) <= gameStateManager.getMoney())
+                                    ingameMenu.setSelectedTowerType(TowerType::Tower1);
                             } else if (transactionType == MenuButtonPresses::Tower2) {
-                                ingameMenu.setSelectedTowerType(TowerType::Tower2);
+                                if (static_cast<int>(TowerType::Tower2) <= gameStateManager.getMoney())
+                                    ingameMenu.setSelectedTowerType(TowerType::Tower2);
                             } else if (transactionType == MenuButtonPresses::Tower3) {
-                                ingameMenu.setSelectedTowerType(TowerType::Tower3);
+                                if (static_cast<int>(TowerType::Tower3) <= gameStateManager.getMoney())
+                                    ingameMenu.setSelectedTowerType(TowerType::Tower3);
                             } else if (transactionType == MenuButtonPresses::Tower4) {
-                                ingameMenu.setSelectedTowerType(TowerType::Tower4);
+                                if (static_cast<int>(TowerType::Tower4) <= gameStateManager.getMoney())
+                                    ingameMenu.setSelectedTowerType(TowerType::Tower4);
                             }
                         }
                         //Click was somewhere on game field
-                        if (transactionType == MenuButtonPresses::None && gameClickHitBox.contains(click) && ingameMenu.getSelectedTowerType() != TowerType::None) {
+                        if (transactionType == MenuButtonPresses::None && gameClickHitBox.contains(click) &&
+                            ingameMenu.getSelectedTowerType() != TowerType::None) {
                             if (towerManager.isTowerPositionValid(mousePos)) {
-                                std::cout << "try purchase at :" << mousePos.x << ", " << mousePos.y << std::endl;
                                 purchaseManager.purchase(ingameMenu.getSelectedTowerType(), mousePos);
+                                ingameMenu.setSelectedTowerType(TowerType::None);
                             } else {
                                 ingameMenu.setSelectedTowerType(TowerType::None);
                             }
@@ -94,6 +102,14 @@ GameManager::GameManager(sf::RenderWindow &window) :
                                    menuClickHitBox.contains(click) &&
                                    ingameMenu.getSelectedTowerType() != TowerType::None) {
                             ingameMenu.setSelectedTowerType(TowerType::None);
+                        } else if (gameClickHitBox.contains(click) &&
+                                   ingameMenu.getSelectedTowerType() == TowerType::None) {
+                            auto tower = towerManager.getTowerAtPoint(click);
+                            if (tower != nullptr) {
+                                ingameMenu.selectTower(*tower);
+                            } else {
+                                ingameMenu.deselectTower();
+                            }
                         }
                     }
                     break;
@@ -108,11 +124,12 @@ GameManager::GameManager(sf::RenderWindow &window) :
         }
         ingameMenu.update(delta, mousePos);
         window.clear(sf::Color::Black);
+        window.draw(background);
         map.draw(window, sf::RenderStates::Default);
         enemyManager.draw(window, sf::RenderStates::Default);
-        ingameMenu.draw(window, sf::RenderStates::Default);
         towerManager.draw(window, sf::RenderStates::Default);
         projectileManager.draw(window, sf::RenderStates::Default);
+        ingameMenu.draw(window, sf::RenderStates::Default);
         clock.restart();
         window.display();
     }

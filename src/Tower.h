@@ -53,6 +53,10 @@ public:
     ///Returns the cost to upgrade the tower
     int getUpgradeCost() const;
 
+    float getRange() const;
+
+    float getNextRange() const;
+
 
     TowerType getTowerType() const;
 

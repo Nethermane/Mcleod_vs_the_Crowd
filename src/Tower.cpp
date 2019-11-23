@@ -99,6 +99,16 @@ sf::CircleShape Tower::getHitBox() const {
     return hitBox;
 }
 
+float Tower::getRange() const {
+    return range;
+}
+
+float Tower::getNextRange() const {
+    if(canUpgrade())
+        return (*nextUpgrade).range;
+    return range;
+}
+
 
 
 

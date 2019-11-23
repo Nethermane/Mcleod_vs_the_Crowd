@@ -16,7 +16,7 @@ void TowerManager::update(float delta) {
             projectileManager.addProjectile(t.getProjectileSpeed(), t.getDamage(),
                                             angle,
                                             t.getPosition(),
-                                            resourceManager.GetTexture(ResourceIdentifier::HealthA),
+                                            resourceManager.GetTexture(ResourceIdentifier::projectile),
                                             globalBounds);//speed damage angle position texture global bounds
         });
     }
@@ -25,15 +25,15 @@ void TowerManager::update(float delta) {
 TowerManager::TowerManager(const Map &map, const EnemyManager &enemyManager, ProjectileManager &projectileManager,
                            const ResourceManager &resourceManager, const sf::FloatRect &globalBounds)
         : map(map), enemyManager(enemyManager), projectileManager(projectileManager), resourceManager(resourceManager),globalBounds(globalBounds),
-          towerSizeCircle((*resourceManager.GetTexture(ResourceIdentifier::mcleod)).getSize().x * constants::towerSizeMod){
+          towerSizeCircle((*resourceManager.GetTexture(ResourceIdentifier::mcleod1)).getSize().x * constants::towerSizeMod){
     towerSizeCircle.setScale(constants::towerSizeMod,constants::towerSizeMod);
     towerSizeCircle.setOrigin(towerSizeCircle.getRadius(), towerSizeCircle.getRadius());
     //basic
-    tower1Upgrades.push_front(Upgrade(800, 0.9, 4, 250, 100, 12, 1));
-    tower1Upgrades.push_front(Upgrade(700, 1, 3, 100, 10, 8, 1));
-    tower1Upgrades.push_front(Upgrade(600, 1.1, 2, 50, 10, 4, 1));
-    tower1Upgrades.push_front(Upgrade(500, 1.25, 1, 25, 10, 3, 1));
-    tower1Upgrades.push_front(Upgrade(400, 1.5, 0, 10, 10, 3, 1));
+    tower1Upgrades.push_front(Upgrade(800, 0.9, 4, 250, 100, 14, 1));
+    tower1Upgrades.push_front(Upgrade(700, 1, 3, 100, 10, 13, 1));
+    tower1Upgrades.push_front(Upgrade(600, 1.1, 2, 50, 10, 12, 1));
+    tower1Upgrades.push_front(Upgrade(500, 1.25, 1, 25, 10, 8, 1));
+    tower1Upgrades.push_front(Upgrade(400, 1.5, 0, 10, 10, 5, 1));
 
     //Machine gun or something
     tower2Upgrades.push_front(Upgrade(500, 0.075, 4, 250, 100, 2, 1));
@@ -43,18 +43,18 @@ TowerManager::TowerManager(const Map &map, const EnemyManager &enemyManager, Pro
     tower2Upgrades.push_front(Upgrade(300, 0.2, 0, 10, 10, 1,1));
 
     //Sniper or something
-    tower3Upgrades.push_front(Upgrade(2000, 1.75, 4, 250, 100, 15, 1));
-    tower3Upgrades.push_front(Upgrade(1500, 2, 3, 100, 10, 12, 1));
-    tower3Upgrades.push_front(Upgrade(1200, 2.25, 2, 50, 10, 9, 1));
-    tower3Upgrades.push_front(Upgrade(800, 2.5, 1, 25, 10, 6, 1));
-    tower3Upgrades.push_front(Upgrade(600, 3, 0, 10, 10, 3, 1));
+    tower3Upgrades.push_front(Upgrade(2000, 1.75, 4, 250, 100, 40, 1));
+    tower3Upgrades.push_front(Upgrade(1500, 2, 3, 100, 10, 12, 35));
+    tower3Upgrades.push_front(Upgrade(1200, 2.25, 2, 50, 10, 30, 1));
+    tower3Upgrades.push_front(Upgrade(800, 2.5, 1, 25, 10, 25, 1));
+    tower3Upgrades.push_front(Upgrade(750, 3, 0, 10, 10, 15, 1));
 
     //Close quarters monster
-    tower4Upgrades.push_front(Upgrade(600, 0.7, 4, 250, 100, 14, 0.75));
-    tower4Upgrades.push_front(Upgrade(500, 0.75, 3, 100, 10, 12, 0.75));
-    tower4Upgrades.push_front(Upgrade(500, 0.8, 2, 50, 10, 10, 0.75));
-    tower4Upgrades.push_front(Upgrade(400, 0.9, 1, 25, 10, 8, 0.75));
-    tower4Upgrades.push_front(Upgrade(300, 1, 0, 10, 10, 6, 0.75));
+    tower4Upgrades.push_front(Upgrade(600, 0.2, 4, 250, 100, 14, 0.75));
+    tower4Upgrades.push_front(Upgrade(500, 0.25, 3, 100, 10, 12, 0.75));
+    tower4Upgrades.push_front(Upgrade(500, 0.3, 2, 50, 10, 10, 0.75));
+    tower4Upgrades.push_front(Upgrade(400, 0.35, 1, 25, 10, 8, 0.75));
+    tower4Upgrades.push_front(Upgrade(300, 0.4, 0, 10, 10, 6, 0.75));
 }
 
 void TowerManager::createTower(const sf::Vector2f &position,
@@ -62,16 +62,16 @@ void TowerManager::createTower(const sf::Vector2f &position,
     std::cout << "tower actually placed at :" << position.x << ", " << position.y << std::endl;
     switch (towerType) {
         case TowerType::Tower1:
-            towers.emplace_back(resourceManager.GetTexture(ResourceIdentifier::mcleod), position, tower1Upgrades.begin(), tower1Upgrades.end(), towerType);
+            towers.emplace_back(resourceManager.GetTexture(ResourceIdentifier::mcleod1), position, tower1Upgrades.begin(), tower1Upgrades.end(), towerType);
             break;
         case TowerType::Tower2:
-            towers.emplace_back(resourceManager.GetTexture(ResourceIdentifier::mcleod), position, tower2Upgrades.begin(), tower2Upgrades.end(), towerType);
+            towers.emplace_back(resourceManager.GetTexture(ResourceIdentifier::mcleod2), position, tower2Upgrades.begin(), tower2Upgrades.end(), towerType);
             break;
         case TowerType::Tower3:
-            towers.emplace_back(resourceManager.GetTexture(ResourceIdentifier::mcleod), position, tower3Upgrades.begin(), tower3Upgrades.end(), towerType);
+            towers.emplace_back(resourceManager.GetTexture(ResourceIdentifier::mcleod3), position, tower3Upgrades.begin(), tower3Upgrades.end(), towerType);
             break;
         case TowerType::Tower4:
-            towers.emplace_back(resourceManager.GetTexture(ResourceIdentifier::mcleod), position, tower4Upgrades.begin(), tower4Upgrades.end(), towerType);
+            towers.emplace_back(resourceManager.GetTexture(ResourceIdentifier::mcleod4), position, tower4Upgrades.begin(), tower4Upgrades.end(), towerType);
             break;
         default:
             throw std::runtime_error("Non recognized tower created");
@@ -113,9 +113,6 @@ bool TowerManager::isTowerPositionValid(float x, float y)  {
         if(collision::areColliding(towerSizeCircle, lineSeg)) {
             return false;
         }
-        //if (collidesCircleRectangle(towerSizeCircle, lineSeg)) {
-            //return false;
-        //}
     }
     for(const auto &tower: towers)
         if(collision::areColliding(tower.getHitBox(), towerSizeCircle))
@@ -125,4 +122,11 @@ bool TowerManager::isTowerPositionValid(float x, float y)  {
 
 bool TowerManager::isTowerPositionValid(sf::Vector2f position) {
     return isTowerPositionValid(position.x, position.y);
+}
+
+Tower *TowerManager::getTowerAtPoint(sf::Vector2i vector2) {
+    for(auto& tower: towers)
+        if(tower.getHitBox().getGlobalBounds().contains(vector2.x,vector2.y))
+            return &tower;
+    return nullptr;
 }

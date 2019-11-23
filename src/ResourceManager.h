@@ -24,12 +24,27 @@ enum ResourceIdentifier
     HealthC,
     HealthF,
     apex,
-    mcleod,
     sound,
     pause,
     mute,
     options,
-    pointer
+    pointer,
+    a1,
+    a2,
+    a3,
+    b1,
+    b2,
+    b3,
+    c1,
+    c2,
+    c3,
+    d4,
+    mcleod1,
+    mcleod2,
+    mcleod3,
+    mcleod4,
+    track,
+    projectile
 };
 ///Class which loads resources all and allows others to access them
 class ResourceManager

@@ -43,6 +43,8 @@ public:
 
     bool isTowerPositionValid(float x, float y);
     bool isTowerPositionValid(sf::Vector2f position);
+
+    Tower *getTowerAtPoint(sf::Vector2i vector2);
 };
 
 

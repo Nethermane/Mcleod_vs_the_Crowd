@@ -33,7 +33,7 @@ void InGameMenu::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     target.draw(pause, states);
     target.draw(fps_counter, states);
     target.draw(mouse, states);
-    if(selectedTowerType != TowerType::None)
+    if (selectedTowerType != TowerType::None || selectedTower != nullptr)
         target.draw(range, states);
 }
 
@@ -42,7 +42,7 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
                        GameStateManager &gameStateManager, TowerManager &towerManager)
         : resourceManager(resourceManager), gameStateManager(gameStateManager),
           mouse(*resourceManager.GetTexture(ResourceIdentifier::pointer)), towerManager(towerManager) {
-    mouse.setOrigin(mouse.getGlobalBounds().width/2, mouse.getGlobalBounds().height/2);
+    mouse.setOrigin(mouse.getGlobalBounds().width / 2, mouse.getGlobalBounds().height / 2);
     selectedTower = nullptr;
     range.setFillColor(sf::Color(255, 255, 255, 128));
     padding = screenSize.x * 0.02f;
@@ -108,7 +108,8 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     round.setFillColor(sf::Color::Black);
     round.setString("Round: " + std::to_string(gameStateManager.getRound()));
     round.setOrigin(round.getLocalBounds().width / 2, round.getLocalBounds().height / 2);
-    round.setPosition(center_horizontal, outlineMoney.getPosition().y + outlineMoney.getLocalBounds().height / 2+ round.getLocalBounds().height/2);
+    round.setPosition(center_horizontal, outlineMoney.getPosition().y + outlineMoney.getLocalBounds().height / 2 +
+                                         round.getLocalBounds().height / 2);
 
 
 //    outlineRound.setSize(sf::Vector2f(screenSize.x * 0.25f, round.getLocalBounds().height + padding));
@@ -133,10 +134,9 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     outlineTower1.setPosition(cost1.getPosition().x, cost1.getPosition().y - cost1.getLocalBounds().width / 2 -
                                                      outlineTower1.getLocalBounds().height / 2);
 
-    tower1.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod));
-    tower1.setScale(
-            outlineTower1.getLocalBounds().width / tower1.getLocalBounds().width,
-            outlineTower1.getLocalBounds().height / tower1.getLocalBounds().height);
+    tower1.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod1));
+    float tower1Scale = outlineTower1.getLocalBounds().width / tower1.getLocalBounds().width / 2;
+    tower1.setScale(tower1Scale, tower1Scale);
     tower1.setOrigin(tower1.getLocalBounds().width / 2, tower1.getLocalBounds().height / 2);
     tower1.setPosition(outlineTower1.getPosition());
 
@@ -155,11 +155,9 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     outlineTower2.setOutlineThickness(2);
     outlineTower2.setPosition(cost2.getPosition().x, cost2.getPosition().y - cost2.getLocalBounds().width / 2 -
                                                      outlineTower1.getLocalBounds().height / 2);
-
-    tower2.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod));
-    tower2.setScale(
-            outlineTower2.getLocalBounds().width / tower2.getLocalBounds().width,
-            outlineTower2.getLocalBounds().height / tower2.getLocalBounds().height);
+    tower2.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod2));
+    float tower2Scale = outlineTower2.getLocalBounds().width / tower2.getLocalBounds().width / 2;
+    tower2.setScale(tower2Scale, tower2Scale);
     tower2.setOrigin(tower2.getLocalBounds().width / 2, tower2.getLocalBounds().height / 2);
     tower2.setPosition(outlineTower2.getPosition());
 
@@ -177,11 +175,9 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     outlineTower3.setOutlineThickness(2);
     outlineTower3.setPosition(cost3.getPosition().x, cost3.getPosition().y - cost3.getLocalBounds().width / 2 -
                                                      outlineTower1.getLocalBounds().height / 2);
-
-    tower3.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod));
-    tower3.setScale(
-            outlineTower3.getLocalBounds().width / tower3.getLocalBounds().width,
-            outlineTower3.getLocalBounds().height / tower3.getLocalBounds().height);
+    tower3.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod3));
+    float tower3Scale = outlineTower3.getLocalBounds().width / tower3.getLocalBounds().width / 2;
+    tower3.setScale(tower3Scale, tower3Scale);
     tower3.setOrigin(tower3.getLocalBounds().width / 2, tower3.getLocalBounds().height / 2);
     tower3.setPosition(outlineTower3.getPosition());
 
@@ -200,11 +196,9 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
     outlineTower4.setOutlineThickness(2);
     outlineTower4.setPosition(cost4.getPosition().x, cost4.getPosition().y - cost4.getLocalBounds().width / 2 -
                                                      outlineTower1.getLocalBounds().height / 2);
-
-    tower4.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod));
-    tower4.setScale(
-            outlineTower4.getLocalBounds().width / tower4.getLocalBounds().width,
-            outlineTower4.getLocalBounds().height / tower4.getLocalBounds().height);
+    tower4.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod4));
+    float tower4Scale = outlineTower4.getLocalBounds().width / tower4.getLocalBounds().width / 2;
+    tower4.setScale(tower4Scale, tower4Scale);
     tower4.setOrigin(tower4.getLocalBounds().width / 2, tower4.getLocalBounds().height / 2);
     tower4.setPosition(outlineTower4.getPosition());
 
@@ -248,10 +242,21 @@ InGameMenu::InGameMenu(sf::Vector2u screenSize, const float &percentScreenTake, 
 
 void InGameMenu::update(const float &delta, const sf::Vector2f &mousePos) {
     mouse.setPosition(mousePos);
-    range.setPosition(mousePos);
+    if (selectedTower != nullptr) {
+        range.setPosition(selectedTower->getPosition());
+        if (outlineUpgrade.getGlobalBounds().contains(mousePos)) {
+            range.setRadius(selectedTower->getNextRange());
+            range.setOrigin(range.getLocalBounds().width / 2, range.getLocalBounds().height / 2);
+        } else {
+            range.setRadius(selectedTower->getRange());
+            range.setOrigin(range.getLocalBounds().width / 2, range.getLocalBounds().height / 2);
+        }
+    } else {
+        range.setPosition(mousePos);
+    }
     fps_counter.setString(std::to_string(static_cast<int>(1.0f / delta)));
-    if(selectedTowerType != TowerType::None) {
-        if(towerManager.isTowerPositionValid(mousePos) && menuPosition(mousePos) == MenuButtonPresses::None) {
+    if (selectedTowerType != TowerType::None) {
+        if (towerManager.isTowerPositionValid(mousePos) && menuPosition(mousePos) == MenuButtonPresses::None) {
             range.setFillColor(sf::Color(255, 255, 255, 128));
         } else {
             range.setFillColor(sf::Color(255, 0, 0, 128));
@@ -265,7 +270,9 @@ void InGameMenu::update(const float &delta, const sf::Vector2f &mousePos) {
 
 void InGameMenu::selectTower(Tower &tower) {
     selectedTower = &tower;
-
+    selectedTowerType = TowerType::None;
+    range.setRadius(tower.getRange());
+    range.setOrigin(range.getLocalBounds().width / 2, range.getLocalBounds().height / 2);
 }
 
 void InGameMenu::deselectTower() {
@@ -275,10 +282,15 @@ void InGameMenu::deselectTower() {
 void InGameMenu::updateUpgrade() {
     if (selectedTower != nullptr && (*selectedTower).canUpgrade() &&
         gameStateManager.getMoney() >= (*selectedTower).getUpgradeCost())
-        outlineUpgrade.setFillColor(sf::Color(169, 169, 169, 255));
-    else
         outlineUpgrade.setFillColor(sf::Color(169, 169, 169, 100));
-
+    else
+        outlineUpgrade.setFillColor(sf::Color(169, 169, 169, 255));
+    if(selectedTower != nullptr && selectedTower->canUpgrade())
+        upgrade.setString("Upgrade (" + std::to_string(selectedTower->getUpgradeCost()) + ")");
+    else if (selectedTower != nullptr)
+        upgrade.setString("Max Level");
+    else
+        upgrade.setString("Upgrade");
 }
 
 void InGameMenu::updateRound() {
@@ -338,19 +350,19 @@ void InGameMenu::setSelectedTowerType(TowerType type) {
     if (selectedTowerType != TowerType::None) {
         switch (selectedTowerType) {
             case TowerType::Tower1:
-                mouse.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod), true);
+                mouse.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod1), true);
                 range.setRadius(towerManager.getFirstRange(TowerType::Tower1));
                 break;
             case TowerType::Tower2:
-                mouse.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod), true);
+                mouse.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod2), true);
                 range.setRadius(towerManager.getFirstRange(TowerType::Tower2));
                 break;
             case TowerType::Tower3:
-                mouse.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod), true);
+                mouse.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod3), true);
                 range.setRadius(towerManager.getFirstRange(TowerType::Tower3));
                 break;
             case TowerType::Tower4:
-                mouse.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod), true);
+                mouse.setTexture(*resourceManager.GetTexture(ResourceIdentifier::mcleod4), true);
                 range.setRadius(towerManager.getFirstRange(TowerType::Tower4));
                 break;
             default:
@@ -360,7 +372,7 @@ void InGameMenu::setSelectedTowerType(TowerType type) {
         mouse.setScale(constants::towerSizeMod, constants::towerSizeMod);
         range.setOrigin(range.getLocalBounds().width / 2, range.getLocalBounds().height / 2);
     } else {
-        mouse.setTexture( *resourceManager.GetTexture(ResourceIdentifier::pointer), true);
+        mouse.setTexture(*resourceManager.GetTexture(ResourceIdentifier::pointer), true);
         mouse.setOrigin(mouse.getLocalBounds().width / 2, mouse.getLocalBounds().height / 2);
     }
 }
